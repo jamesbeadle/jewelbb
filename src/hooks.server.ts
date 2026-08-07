@@ -8,8 +8,9 @@ export const handle: Handle = async ({ event, resolve }) => {
 		const token = event.cookies.get(ADMIN_COOKIE);
 		const ok = await verifySessionToken(token);
 		// Temporary diagnostics — visible in Vercel → Logs. Remove once login is confirmed.
+		const rawCookieHeader = event.request.headers.get('cookie');
 		console.log(
-			`[admin-guard] path=${pathname} cookiePresent=${Boolean(token)} verified=${ok}`
+			`[admin-guard] path=${pathname} rawCookieHeader=${rawCookieHeader === null ? 'ABSENT' : 'present(' + rawCookieHeader.split(';').length + ')'} cookiePresent=${Boolean(token)} verified=${ok}`
 		);
 		if (!ok) redirect(303, `/admin/login?why=${token ? 'badtoken' : 'nocookie'}`);
 	}
