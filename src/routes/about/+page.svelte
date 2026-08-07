@@ -3,8 +3,11 @@
 	import BadgeStrip from '$lib/components/BadgeStrip.svelte';
 	import CtaBand from '$lib/components/CtaBand.svelte';
 	import { site } from '$lib/data/site';
-	import { team } from '$lib/data/team';
 	import { images } from '$lib/data/images';
+
+	let { data } = $props();
+
+	const team = $derived(data.team);
 </script>
 
 <Seo
@@ -44,7 +47,7 @@
 			vision and lifestyle of our clients.
 		</p>
 		<div class="grid grid--3 team-grid">
-			{#each team as member (member.name)}
+			{#each team as member, i (member.name + i)}
 				<article class="card team-card">
 					<div class="team-card__head">
 						<img class="team-card__photo" src={member.photo} alt={member.name} loading="lazy" />
@@ -79,9 +82,7 @@
 			</p>
 			<div class="approach__actions">
 				<a href="/contact" class="btn btn--primary">Contact us today</a>
-				<a href={site.brochureUrl} class="btn btn--outline" target="_blank" rel="noopener noreferrer">
-					Download our brochure
-				</a>
+				<a href={site.brochureUrl} class="btn btn--outline">View our brochure</a>
 			</div>
 		</div>
 		<ul class="card approach__points">

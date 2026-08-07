@@ -47,6 +47,25 @@ Post body in markdown…
 
 Commit and push — the post appears at `/post/my-new-post` and in the sitemap automatically.
 
+## Admin area & Supabase content
+
+The site has a lightweight CMS at **`/admin`** (discrete link in the footer):
+
+- **Staff** — add/edit/reorder/delete team members shown on `/about`, including photo uploads.
+- **Brochure** — edit the sections of `/brochure`, a print-ready page visitors can save as a PDF. The footer "View our brochure" link points here.
+
+Content lives in Supabase; uploaded images go to a public `media` storage bucket.
+
+**Setup (once):**
+
+1. In the Supabase dashboard open **SQL Editor**, paste the contents of `supabase/schema.sql`, and Run. This creates the tables, locks them down with RLS, creates the storage bucket, and seeds the current team + a starter brochure.
+2. In **Project Settings → API**, copy the **Project URL** and the **service_role** key into the `SUPABASE_URL` / `SUPABASE_SERVICE_ROLE_KEY` env vars (locally in `.env`, and on Vercel).
+3. Set `ADMIN_USERNAME` / `ADMIN_PASSWORD` (and ideally `ADMIN_SESSION_SECRET`) env vars for the admin login.
+
+If Supabase isn't configured the public site still works — `/about` falls back to the static team data in `src/lib/data/team.ts` and `/brochure` renders a basic fallback.
+
+The service_role key bypasses row-level security — it must only ever live in env vars (never commit it; `.env` is gitignored).
+
 ## Deploying to Vercel (first time)
 
 1. Push this repo to GitHub.

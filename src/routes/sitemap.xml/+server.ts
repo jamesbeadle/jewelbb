@@ -12,6 +12,7 @@ const staticPaths = [
 	'/portfolio',
 	'/ourcommunity',
 	'/blog',
+	'/brochure',
 	'/contact',
 	'/privacy-policy',
 	'/terms-and-conditions'

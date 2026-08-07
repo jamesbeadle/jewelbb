@@ -19,7 +19,9 @@ export const site = {
 		linkedin: 'https://www.linkedin.com/company/jewel-bepoke-build-ltd/',
 		houzz: 'https://www.houzz.co.uk/professionals/design-and-build/jewel-bespoke-build-ltd-pfvwgb-pf~1051978986'
 	},
-	brochureUrl: 'https://www.jewelbb.co.uk/_files/ugd/2f83b8_f053fdadfcac49fe9d7055671d3dad51.pdf'
+	// Data-driven brochure page (editable in /admin); the old Wix PDF was
+	// https://www.jewelbb.co.uk/_files/ugd/2f83b8_f053fdadfcac49fe9d7055671d3dad51.pdf
+	brochureUrl: '/brochure'
 };
 
 export const nav = [

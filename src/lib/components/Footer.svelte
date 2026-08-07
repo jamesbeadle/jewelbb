@@ -51,8 +51,8 @@
 					<li><a href={s.href} target="_blank" rel="noopener noreferrer">{s.label}</a></li>
 				{/each}
 			</ul>
-			<a class="btn btn--outline footer__brochure" href={site.brochureUrl} target="_blank" rel="noopener noreferrer">
-				Download our brochure
+			<a class="btn btn--outline footer__brochure" href={site.brochureUrl}>
+				View our brochure
 			</a>
 		</div>
 	</div>
@@ -63,6 +63,7 @@
 			<ul>
 				<li><a href="/privacy-policy">Privacy policy</a></li>
 				<li><a href="/terms-and-conditions">Terms &amp; conditions</a></li>
+				<li><a class="footer__admin" href="/admin">Admin</a></li>
 			</ul>
 		</div>
 	</div>
@@ -162,4 +163,10 @@
 	.footer__legal a {
 		color: var(--ink-600);
 	}
+
+	.footer__admin {
+		opacity: 0.55;
+		font-size: 0.82rem;
+	}
+
 </style>
