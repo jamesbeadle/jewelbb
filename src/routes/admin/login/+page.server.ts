@@ -1,4 +1,4 @@
-import { fail, redirect } from '@sveltejs/kit';
+import { fail } from '@sveltejs/kit';
 import {
 	checkCredentials,
 	createSessionToken,
@@ -29,8 +29,10 @@ export const actions: Actions = {
 			return fail(401, { error: 'Incorrect username or password.' });
 		}
 
-		console.log('[admin-login] OK — setting session cookie and redirecting');
+		console.log('[admin-login] OK — setting session cookie');
 		setSessionCookie(cookies, await createSessionToken());
-		redirect(303, '/admin');
+		// Return 200 (not a redirect) so the Set-Cookie header rides on a normal
+		// page response — the client then navigates to /admin itself.
+		return { success: true };
 	}
 };

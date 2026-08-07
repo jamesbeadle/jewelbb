@@ -1,5 +1,9 @@
 <script lang="ts">
 	let { data, form } = $props();
+
+	$effect(() => {
+		if (form?.success) window.location.assign('/admin');
+	});
 </script>
 
 <svelte:head>
@@ -28,6 +32,11 @@
 		{/if}
 		{#if form?.error}
 			<p class="login__error" role="alert">{form.error}</p>
+		{/if}
+		{#if form?.success}
+			<p class="login__success" role="status">
+				Logged in — taking you to the dashboard… <a href="/admin">Continue</a>
+			</p>
 		{/if}
 		<form method="POST">
 			<label>
@@ -91,6 +100,15 @@
 		color: #a33a2a;
 		background: #fdf1ee;
 		border: 1px solid #f0cfc7;
+		border-radius: var(--radius);
+		padding: 0.7rem 0.9rem;
+		margin: 0;
+		font-size: 0.92rem;
+	}
+
+	.login__success {
+		background: #eef7ee;
+		border: 1px solid #cfe6cf;
 		border-radius: var(--radius);
 		padding: 0.7rem 0.9rem;
 		margin: 0;
