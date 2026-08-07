@@ -18,6 +18,9 @@
 	<p class="warn">
 		Supabase is configured but unreachable — check the keys, and that
 		<code>supabase/schema.sql</code> has been run.
+		{#if data.dbError}
+			<br /><code class="warn__detail">{data.dbError}</code>
+		{/if}
 	</p>
 {/if}
 
@@ -42,6 +45,14 @@
 		padding: 0.9rem 1.1rem;
 		color: var(--ink-600);
 		max-width: 46rem;
+	}
+
+	.warn__detail {
+		display: inline-block;
+		margin-top: 0.5rem;
+		font-size: 0.82rem;
+		word-break: break-word;
+		color: #8a5a2a;
 	}
 
 	.tiles {

@@ -4,6 +4,7 @@ import type { PageServerLoad } from './$types';
 export const load: PageServerLoad = async () => {
 	let staffCount: number | null = null;
 	let sectionCount: number | null = null;
+	let dbError: string | null = null;
 
 	if (dbConfigured()) {
 		try {
@@ -13,10 +14,10 @@ export const load: PageServerLoad = async () => {
 			]);
 			staffCount = staff.length;
 			sectionCount = sections.length;
-		} catch {
-			// leave counts null — dashboard shows the connection warning
+		} catch (e) {
+			dbError = (e instanceof Error ? e.message : 'Unknown error').slice(0, 400);
 		}
 	}
 
-	return { configured: dbConfigured(), staffCount, sectionCount };
+	return { configured: dbConfigured(), staffCount, sectionCount, dbError };
 };
