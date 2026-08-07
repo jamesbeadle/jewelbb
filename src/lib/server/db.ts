@@ -22,12 +22,22 @@ export interface BrochureSectionRow {
 	sort_order: number;
 }
 
+// Trimmed to survive stray whitespace/newlines from dashboard copy-paste;
+// trailing slash on the URL is also tolerated.
+function baseUrl(): string {
+	return (env.SUPABASE_URL ?? '').trim().replace(/\/+$/, '');
+}
+
+function serviceKey(): string {
+	return (env.SUPABASE_SERVICE_ROLE_KEY ?? '').trim();
+}
+
 export function dbConfigured(): boolean {
-	return Boolean(env.SUPABASE_URL && env.SUPABASE_SERVICE_ROLE_KEY);
+	return Boolean(baseUrl() && serviceKey());
 }
 
 function headers(extra: Record<string, string> = {}): Record<string, string> {
-	const key = env.SUPABASE_SERVICE_ROLE_KEY ?? '';
+	const key = serviceKey();
 	return {
 		apikey: key,
 		Authorization: `Bearer ${key}`,
@@ -36,7 +46,7 @@ function headers(extra: Record<string, string> = {}): Record<string, string> {
 }
 
 function restUrl(path: string): string {
-	return `${env.SUPABASE_URL}/rest/v1/${path}`;
+	return `${baseUrl()}/rest/v1/${path}`;
 }
 
 async function check(res: Response, what: string): Promise<Response> {
@@ -89,11 +99,11 @@ export async function dbDelete(table: string, id: string): Promise<void> {
 export async function storageUpload(file: File, folder: string): Promise<string> {
 	const ext = (file.name.split('.').pop() || 'jpg').toLowerCase().replace(/[^a-z0-9]/g, '');
 	const path = `${folder}/${crypto.randomUUID()}.${ext}`;
-	const res = await fetch(`${env.SUPABASE_URL}/storage/v1/object/media/${path}`, {
+	const res = await fetch(`${baseUrl()}/storage/v1/object/media/${path}`, {
 		method: 'POST',
 		headers: headers({ 'Content-Type': file.type || 'application/octet-stream' }),
 		body: await file.arrayBuffer()
 	});
 	await check(res, 'storage upload');
-	return `${env.SUPABASE_URL}/storage/v1/object/public/media/${path}`;
+	return `${baseUrl()}/storage/v1/object/public/media/${path}`;
 }

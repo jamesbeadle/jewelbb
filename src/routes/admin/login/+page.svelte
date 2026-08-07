@@ -1,9 +1,9 @@
 <script lang="ts">
+	import { enhance } from '$app/forms';
+
 	let { data, form } = $props();
 
-	$effect(() => {
-		if (form?.success) window.location.assign('/admin');
-	});
+	let submitting = $state(false);
 </script>
 
 <svelte:head>
@@ -19,17 +19,6 @@
 				<code>ADMIN_PASSWORD</code> environment variables, then restart the site.
 			</p>
 		{/if}
-		{#if data.why === 'nocookie'}
-			<p class="login__warn" role="alert">
-				<strong>Diagnostic:</strong> you reached the admin area without a session cookie — the
-				login itself succeeded, but the browser didn't store or send the cookie back.
-			</p>
-		{:else if data.why === 'badtoken'}
-			<p class="login__warn" role="alert">
-				<strong>Diagnostic:</strong> a session cookie was sent but failed signature
-				verification — the signing secret differs between requests.
-			</p>
-		{/if}
 		{#if form?.error}
 			<p class="login__error" role="alert">{form.error}</p>
 		{/if}
@@ -38,7 +27,24 @@
 				Logged in — taking you to the dashboard… <a href="/admin">Continue</a>
 			</p>
 		{/if}
-		<form method="POST">
+		<form
+			method="POST"
+			use:enhance={() => {
+				submitting = true;
+				return async ({ result, update }) => {
+					if (
+						result.type === 'success' &&
+						(result.data as { success?: boolean } | undefined)?.success
+					) {
+						// Cookie is already set by the response; go straight to the dashboard.
+						window.location.assign('/admin');
+						return;
+					}
+					submitting = false;
+					await update(); // renders the error message on failure
+				};
+			}}
+		>
 			<label>
 				Username
 				<input name="username" autocomplete="username" required />
@@ -47,7 +53,9 @@
 				Password
 				<input name="password" type="password" autocomplete="current-password" required />
 			</label>
-			<button class="btn btn--primary" type="submit">Log in</button>
+			<button class="btn btn--primary" type="submit" disabled={submitting}>
+				{submitting ? 'Logging in…' : 'Log in'}
+			</button>
 		</form>
 	</div>
 </div>
