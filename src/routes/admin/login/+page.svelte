@@ -15,6 +15,17 @@
 				<code>ADMIN_PASSWORD</code> environment variables, then restart the site.
 			</p>
 		{/if}
+		{#if data.why === 'nocookie'}
+			<p class="login__warn" role="alert">
+				<strong>Diagnostic:</strong> you reached the admin area without a session cookie — the
+				login itself succeeded, but the browser didn't store or send the cookie back.
+			</p>
+		{:else if data.why === 'badtoken'}
+			<p class="login__warn" role="alert">
+				<strong>Diagnostic:</strong> a session cookie was sent but failed signature
+				verification — the signing secret differs between requests.
+			</p>
+		{/if}
 		{#if form?.error}
 			<p class="login__error" role="alert">{form.error}</p>
 		{/if}

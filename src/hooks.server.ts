@@ -11,7 +11,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 		console.log(
 			`[admin-guard] path=${pathname} cookiePresent=${Boolean(token)} verified=${ok}`
 		);
-		if (!ok) redirect(303, '/admin/login');
+		if (!ok) redirect(303, `/admin/login?why=${token ? 'badtoken' : 'nocookie'}`);
 	}
 
 	return resolve(event);

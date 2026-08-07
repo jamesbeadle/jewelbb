@@ -7,8 +7,12 @@ import {
 } from '$lib/server/auth';
 import type { Actions, PageServerLoad } from './$types';
 
-export const load: PageServerLoad = () => {
-	return { configured: credentialsConfigured() };
+export const load: PageServerLoad = ({ url }) => {
+	return {
+		configured: credentialsConfigured(),
+		// Temporary diagnostics set by the /admin guard redirect
+		why: url.searchParams.get('why')
+	};
 };
 
 export const actions: Actions = {
