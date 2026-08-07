@@ -30,19 +30,27 @@ async function hmac(payload: string, secret: string): Promise<string> {
 	return b64url(sig);
 }
 
+// Env values are trimmed to survive stray whitespace/newlines from
+// copy-pasting into dashboard fields.
+function envTrim(v: string | undefined): string {
+	return (v ?? '').trim();
+}
+
 function secret(): string {
 	// Fall back to the admin password so the site works with minimal config;
 	// set ADMIN_SESSION_SECRET for stricter separation.
-	return env.ADMIN_SESSION_SECRET || env.ADMIN_PASSWORD || '';
+	return envTrim(env.ADMIN_SESSION_SECRET) || envTrim(env.ADMIN_PASSWORD);
 }
 
 export function credentialsConfigured(): boolean {
-	return Boolean(env.ADMIN_USERNAME && env.ADMIN_PASSWORD);
+	return Boolean(envTrim(env.ADMIN_USERNAME) && envTrim(env.ADMIN_PASSWORD));
 }
 
 export function checkCredentials(username: string, password: string): boolean {
 	if (!credentialsConfigured()) return false;
-	return username === env.ADMIN_USERNAME && password === env.ADMIN_PASSWORD;
+	return (
+		username.trim() === envTrim(env.ADMIN_USERNAME) && password === envTrim(env.ADMIN_PASSWORD)
+	);
 }
 
 export async function createSessionToken(): Promise<string> {
