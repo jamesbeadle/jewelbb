@@ -1,0 +1,242 @@
+/* ---------------------------------------------------------------------------
+   Jewel Bespoke Build — design tokens & base styles
+   Brand colours taken from the official logo SVG:
+   orange #f58220 · gold #c19a52 · charcoal #231f20
+--------------------------------------------------------------------------- */
+:root {
+	/* Brand palette */
+	--orange-600: #e07214;
+	--orange-500: #f58220;
+	--orange-100: #fdeadb;
+	--gold-600: #a8823f;
+	--gold-500: #c19a52;
+	--gold-300: #dcc294;
+	--ink-900: #231f20;
+	--ink-600: #55504f;
+	--ink-400: #8a8482;
+	--paper: #ffffff;
+	--surface: #ffffff;
+	--tint: #f7f6f4;
+	--line: #e9e7e4;
+
+	/* Typography */
+	--font-display: 'Poppins', 'Century Gothic', 'Futura', -apple-system, sans-serif;
+	--font-body: 'Questrial', 'Century Gothic', -apple-system, BlinkMacSystemFont, sans-serif;
+
+	/* Rhythm */
+	--radius: 10px;
+	--radius-lg: 16px;
+	--container: 1160px;
+	--section-pad: clamp(3.5rem, 8vw, 6rem);
+	--shadow-soft: 0 2px 20px rgba(35, 31, 32, 0.07);
+	--shadow-lift: 0 12px 36px rgba(35, 31, 32, 0.12);
+}
+
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+
+html {
+	scroll-behavior: smooth;
+}
+
+body {
+	margin: 0;
+	font-family: var(--font-body);
+	font-size: 1.0625rem;
+	line-height: 1.7;
+	color: var(--ink-900);
+	background: var(--paper);
+	-webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+h4 {
+	font-family: var(--font-display);
+	font-weight: 600;
+	line-height: 1.2;
+	color: var(--ink-900);
+	margin: 0 0 0.6em;
+	text-wrap: balance;
+}
+
+h1 {
+	font-size: clamp(2.1rem, 4.6vw, 3.1rem);
+}
+
+h2 {
+	font-size: clamp(1.6rem, 3.4vw, 2.2rem);
+}
+
+h3 {
+	font-size: clamp(1.15rem, 2.2vw, 1.35rem);
+}
+
+p {
+	margin: 0 0 1em;
+}
+
+a {
+	color: var(--ink-900);
+	text-decoration-thickness: 1px;
+	text-underline-offset: 3px;
+}
+
+img {
+	max-width: 100%;
+	display: block;
+}
+
+/* Layout helpers ---------------------------------------------------------- */
+.container {
+	width: min(var(--container), 100% - 2.5rem);
+	margin-inline: auto;
+}
+
+.section {
+	padding-block: var(--section-pad);
+}
+
+.section--tint {
+	background: var(--tint);
+	border-block: 1px solid var(--line);
+}
+
+.kicker {
+	display: inline-block;
+	font-family: var(--font-display);
+	font-size: 0.8rem;
+	font-weight: 600;
+	letter-spacing: 0.18em;
+	text-transform: uppercase;
+	color: var(--gold-600);
+	margin-bottom: 0.9rem;
+}
+
+.lede {
+	font-size: 1.13rem;
+	color: var(--ink-600);
+	max-width: 46rem;
+}
+
+/* Buttons ----------------------------------------------------------------- */
+.btn {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.5rem;
+	padding: 0.85rem 1.7rem;
+	border-radius: 999px;
+	border: 1.5px solid transparent;
+	font-family: var(--font-display);
+	font-size: 0.95rem;
+	font-weight: 500;
+	text-decoration: none;
+	cursor: pointer;
+	transition:
+		transform 0.15s ease,
+		box-shadow 0.15s ease,
+		background-color 0.15s ease,
+		color 0.15s ease,
+		border-color 0.15s ease;
+}
+
+.btn:hover {
+	transform: translateY(-1px);
+}
+
+.btn--primary {
+	background: var(--orange-500);
+	color: #fff;
+}
+
+.btn--primary:hover {
+	background: var(--orange-600);
+	box-shadow: var(--shadow-soft);
+}
+
+.btn--outline {
+	border-color: var(--ink-900);
+	color: var(--ink-900);
+	background: transparent;
+}
+
+.btn--outline:hover {
+	background: var(--ink-900);
+	color: #fff;
+}
+
+/* Cards / grids ----------------------------------------------------------- */
+.card {
+	background: var(--surface);
+	border: 1px solid var(--line);
+	border-radius: var(--radius-lg);
+	box-shadow: var(--shadow-soft);
+}
+
+.grid {
+	display: grid;
+	gap: 1.5rem;
+}
+
+@media (min-width: 700px) {
+	.grid--2 {
+		grid-template-columns: 1fr 1fr;
+	}
+
+	.grid--3 {
+		grid-template-columns: repeat(3, 1fr);
+	}
+}
+
+/* Prose (blog posts, policies) ------------------------------------------- */
+.prose {
+	max-width: 44rem;
+}
+
+.prose h2 {
+	margin-top: 2.2em;
+	font-size: 1.45rem;
+}
+
+.prose h3 {
+	margin-top: 1.8em;
+}
+
+.prose li {
+	margin-bottom: 0.4em;
+}
+
+.prose blockquote {
+	margin: 1.5em 0;
+	padding: 0.4em 0 0.4em 1.2em;
+	border-left: 3px solid var(--gold-500);
+	color: var(--ink-600);
+	font-style: italic;
+}
+
+/* Utility ----------------------------------------------------------------- */
+.visually-hidden {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+	clip: rect(0 0 0 0);
+	white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	html {
+		scroll-behavior: auto;
+	}
+
+	*,
+	*::before,
+	*::after {
+		animation-duration: 0.01ms !important;
+		transition-duration: 0.01ms !important;
+	}
+}

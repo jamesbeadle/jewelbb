@@ -1,0 +1,9 @@
+{
+	"redirects": [
+		{
+			"source": "/copy-of-privacy-policy",
+			"destination": "/terms-and-conditions",
+			"permanent": true
+		}
+	]
+}
