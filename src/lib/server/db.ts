@@ -27,6 +27,26 @@ export interface ProjectRow {
 	sort_order: number;
 }
 
+export interface RtwSubmissionRow {
+	id: string;
+	group_id: string;
+	entity: string;
+	full_name: string;
+	trade: string;
+	engagement_type: string;
+	start_date: string | null;
+	check_method: string;
+	document_seen: string;
+	check_date: string | null;
+	checked_by: string;
+	outcome: string;
+	permission_expiry: string | null;
+	followup_due: string | null;
+	evidence_ref: string;
+	notes: string;
+	created_at: string;
+}
+
 export interface BrochureSectionRow {
 	id: string;
 	title: string;
@@ -75,6 +95,18 @@ export async function dbSelect<T>(table: string, query = ''): Promise<T[]> {
 	const res = await fetch(restUrl(`${table}?${query}`), { headers: headers() });
 	await check(res, `select ${table}`);
 	return res.json();
+}
+
+/** Exact row count for a table (optionally filtered by a PostgREST query). */
+export async function dbCount(table: string, query = ''): Promise<number> {
+	const qs = `${query ? query + '&' : ''}select=id&limit=1`;
+	const res = await fetch(restUrl(`${table}?${qs}`), {
+		method: 'HEAD',
+		headers: headers({ Prefer: 'count=exact' })
+	});
+	await check(res, `count ${table}`);
+	const total = Number((res.headers.get('content-range') ?? '').split('/')[1]);
+	return Number.isFinite(total) ? total : 0;
 }
 
 export async function dbInsert<T>(table: string, row: Record<string, unknown>): Promise<T> {

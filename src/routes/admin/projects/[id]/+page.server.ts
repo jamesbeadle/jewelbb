@@ -12,7 +12,7 @@ import type { Actions, PageServerLoad } from './$types';
 const RESERVED_SLUGS = new Set([
 	'about', 'services', 'portfolio', 'ourcommunity', 'blog', 'brochure',
 	'contact', 'privacy-policy', 'terms-and-conditions', 'post', 'admin',
-	'api', 'sitemap.xml', 'images'
+	'api', 'sitemap.xml', 'images', 'rtw'
 ]);
 
 function slugify(value: string): string {

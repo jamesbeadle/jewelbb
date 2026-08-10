@@ -125,3 +125,34 @@ select * from (values
 	 E'**Call us** — 0208 109 1015\n\n**Email us** — sales@jewelbb.co.uk\n\n**Visit us** — Argent House, Surbiton, Surrey, KT6 7LD\n\nwww.jewelbb.co.uk', 50)
 ) as seed(title, subtitle, body, sort_order)
 where not exists (select 1 from public.brochure_sections);
+
+-- ---------- RTW submissions (added 2026-08-10) --------------------
+-- One row per engaging company per completed check, written by the
+-- server when a checker generates a register entry at /rtw.
+-- Viewed (paginated) at /admin/rtw. RLS on, no policies: service
+-- role only, same as the other tables.
+
+create table if not exists public.rtw_submissions (
+	id uuid primary key default gen_random_uuid(),
+	group_id uuid not null,                 -- groups the rows of one generate click
+	entity text not null,                   -- engaging company, e.g. JBB
+	full_name text not null,
+	trade text not null default '',
+	engagement_type text not null,
+	start_date date,
+	check_method text not null default '',
+	document_seen text not null default '',
+	check_date date,
+	checked_by text not null default '',
+	outcome text not null default '',
+	permission_expiry date,
+	followup_due date,
+	evidence_ref text not null default '',
+	notes text not null default '',
+	created_at timestamptz not null default now()
+);
+
+create index if not exists rtw_submissions_created_at_idx
+	on public.rtw_submissions (created_at desc);
+
+alter table public.rtw_submissions enable row level security;

@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Jewel Group | Right to Work Portal</title>
+<style>
+  :root {
+    --navy: #14213D; --navy-2: #1d2f57; --gold: #C9A227; --gold-soft: #f4ecd4;
+    --bg: #eef0f4; --card: #ffffff; --border: #dce0e8; --text: #1c2026; --muted: #667085;
+    --green: #167a3d; --green-bg: #e8f6ee; --red: #b3261e; --red-bg: #fdecea;
+    --amber: #935f00; --amber-bg: #fff6df;
+    --radius: 14px; --shadow: 0 1px 3px rgba(16,24,40,.07), 0 6px 18px rgba(16,24,40,.05);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; background: var(--bg); color: var(--text); line-height: 1.55; }
+
+  /* App bar */
+  .appbar { background: linear-gradient(135deg, var(--navy) 0%, var(--navy-2) 100%); color: #fff; padding: 0 24px; position: sticky; top: 0; z-index: 50; box-shadow: 0 2px 12px rgba(16,24,40,.25); }
+  .appbar-inner { max-width: 860px; margin: 0 auto; display: flex; align-items: center; gap: 14px; height: 62px; }
+  .wordmark { display: flex; align-items: center; gap: 12px; }
+  .gem { width: 30px; height: 30px; flex-shrink: 0; }
+  .wm-text { line-height: 1.15; }
+  .wm-text .l1 { font-weight: 800; letter-spacing: .16em; font-size: .82rem; }
+  .wm-text .l2 { font-size: .72rem; opacity: .75; letter-spacing: .04em; }
+  .appbar .status-chip { margin-left: auto; font-size: .7rem; background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.25); padding: 4px 10px; border-radius: 999px; letter-spacing: .05em; }
+
+  /* Hero */
+  .hero { background: linear-gradient(135deg, var(--navy) 0%, var(--navy-2) 100%); color: #fff; padding: 26px 24px 84px; }
+  .hero-inner { max-width: 860px; margin: 0 auto; }
+  .hero h1 { font-size: 1.55rem; font-weight: 750; letter-spacing: -.01em; }
+  .hero p { font-size: .92rem; opacity: .8; margin-top: 6px; max-width: 560px; }
+  .hero .rule { display: inline-flex; align-items: center; gap: 8px; margin-top: 14px; background: rgba(201,162,39,.15); border: 1px solid rgba(201,162,39,.5); color: #f0dfae; font-size: .8rem; font-weight: 600; padding: 6px 14px; border-radius: 999px; }
+
+  main { max-width: 860px; margin: -58px auto 0; padding: 0 24px 80px; }
+
+  /* Progress rail */
+  .rail { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); display: flex; overflow-x: auto; padding: 12px 10px; gap: 4px; }
+  .rail-step { display: flex; align-items: center; gap: 7px; font-size: .74rem; font-weight: 600; color: var(--muted); padding: 6px 10px; border-radius: 8px; white-space: nowrap; }
+  .rail-step .dot { width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--border); display: inline-flex; align-items: center; justify-content: center; font-size: .66rem; color: var(--muted); background: #fff; }
+  .rail-step.done { color: var(--green); }
+  .rail-step.done .dot { background: var(--green); border-color: var(--green); color: #fff; }
+
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); padding: 24px; margin-top: 18px; }
+  .card h2 { font-size: 1.02rem; color: var(--navy); display: flex; align-items: center; gap: 10px; }
+  .stepnum { width: 26px; height: 26px; border-radius: 8px; background: var(--navy); color: #fff; font-size: .8rem; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .card h2 .tick { margin-left: auto; font-size: .75rem; font-weight: 700; color: var(--green); visibility: hidden; }
+  .card.complete h2 .tick { visibility: visible; }
+  .card.complete .stepnum { background: var(--green); }
+
+  label { display: block; font-size: .8rem; font-weight: 650; margin: 14px 0 5px; color: #344054; }
+  input[type=text], input[type=date], select { width: 100%; padding: 10px 12px; border: 1.5px solid var(--border); border-radius: 9px; font-size: .95rem; background: #fff; transition: border-color .15s, box-shadow .15s; }
+  input:focus { outline: none; border-color: var(--navy); box-shadow: 0 0 0 3px rgba(20,33,61,.12); }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0 16px; }
+  @media (max-width: 560px) { .grid2 { grid-template-columns: 1fr; } }
+
+  .entities { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 6px; }
+  .chip { border: 1.5px solid var(--border); border-radius: 10px; padding: 9px 18px; font-size: .9rem; font-weight: 600; cursor: pointer; user-select: none; background: #fff; transition: all .15s; }
+  .chip:hover { border-color: var(--navy); }
+  .chip.on { background: var(--navy); color: #fff; border-color: var(--navy); box-shadow: 0 2px 8px rgba(20,33,61,.3); }
+
+  .radio-group { display: flex; flex-direction: column; gap: 9px; margin-top: 8px; }
+  .radio-opt { border: 1.5px solid var(--border); border-radius: 10px; padding: 12px 14px; cursor: pointer; font-size: .92rem; background: #fff; transition: all .15s; display: flex; align-items: center; gap: 10px; }
+  .radio-opt::before { content: ""; width: 16px; height: 16px; border-radius: 50%; border: 2px solid var(--border); flex-shrink: 0; transition: all .15s; }
+  .radio-opt:hover { border-color: var(--navy); }
+  .radio-opt.on { border-color: var(--navy); background: #f2f5fb; }
+  .radio-opt.on::before { border-color: var(--navy); background: radial-gradient(circle, var(--navy) 45%, transparent 50%); }
+
+  .banner { border-radius: 10px; padding: 13px 16px; font-size: .88rem; margin-top: 14px; }
+  .banner.stop { background: var(--red-bg); color: var(--red); border: 1px solid #f0b9b5; font-weight: 650; }
+  .banner.ok { background: var(--green-bg); color: var(--green); border: 1px solid #bfe5cc; font-weight: 650; }
+  .banner.info { background: var(--amber-bg); color: var(--amber); border: 1px solid #eedc9a; }
+
+  .checkitem { display: flex; gap: 12px; align-items: flex-start; padding: 11px 0; border-bottom: 1px solid #f1f3f6; font-size: .9rem; cursor: pointer; }
+  .checkitem:last-of-type { border-bottom: none; }
+  .checkitem input { margin-top: 3px; width: 17px; height: 17px; flex-shrink: 0; accent-color: var(--navy); }
+  a { color: var(--navy-2); font-weight: 600; }
+  .muted { color: var(--muted); font-size: .82rem; margin-top: 8px; }
+
+  .btn { display: inline-flex; align-items: center; gap: 8px; border: none; border-radius: 10px; padding: 13px 24px; font-size: .95rem; font-weight: 700; cursor: pointer; margin-top: 16px; transition: all .15s; }
+  .btn-primary { background: var(--navy); color: #fff; box-shadow: 0 2px 10px rgba(20,33,61,.35); }
+  .btn-primary:hover { background: var(--navy-2); transform: translateY(-1px); }
+  .btn-gold { background: var(--gold); color: var(--navy); }
+  .btn-gold:hover { filter: brightness(1.05); transform: translateY(-1px); }
+  .btn-secondary { background: #fff; color: var(--navy); border: 1.5px solid var(--navy); margin-left: 10px; }
+  .hidden { display: none; }
+
+  textarea { width: 100%; min-height: 110px; font-family: "SF Mono", Consolas, monospace; font-size: .74rem; border: 1.5px solid var(--border); border-radius: 9px; padding: 12px; margin-top: 8px; white-space: pre; background: #fafbfc; }
+  .summary-grid { display: grid; grid-template-columns: 170px 1fr; gap: 8px 14px; font-size: .88rem; margin-top: 12px; }
+  .summary-grid dt { font-weight: 650; color: var(--muted); }
+  .pill { display: inline-block; padding: 3px 12px; border-radius: 999px; font-size: .76rem; font-weight: 750; letter-spacing: .03em; }
+  .pill.pass { background: var(--green-bg); color: var(--green); }
+  .pill.fail { background: var(--red-bg); color: var(--red); }
+
+  footer { text-align: center; font-size: .74rem; color: var(--muted); padding: 26px 24px 40px; max-width: 720px; margin: 0 auto; }
+  footer .v { font-weight: 700; color: var(--navy); }
+  #printhead { display: none; }
+
+  @media print {
+    .appbar, .hero, .rail, .no-print, .btn, footer, #step1,#step2,#step3,#step4,#step5,#step6 { display: none !important; }
+    body { background: #fff; }
+    main { margin-top: 0; padding: 0; max-width: 100%; }
+    .card { border: 1px solid #999; box-shadow: none; break-inside: avoid; }
+    #printhead { display: block !important; padding: 0 0 12px; }
+    #printhead h1 { font-size: 1.1rem; color: #14213D; }
+    #printhead p { font-size: .78rem; color: #555; }
+  }
+</style>
+</head>
+<body>
+
+<div class="appbar">
+  <div class="appbar-inner">
+    <div class="wordmark">
+      <svg class="gem" viewBox="0 0 32 32" aria-hidden="true"><path d="M8 4 L24 4 L30 12 L16 29 L2 12 Z" fill="#C9A227"/><path d="M8 4 L16 12 L24 4 Z" fill="#e8cf8a"/><path d="M2 12 L16 12 L16 29 Z" fill="#a9871f" opacity=".85"/><path d="M16 12 L30 12 L16 29 Z" fill="#C9A227"/></svg>
+      <div class="wm-text"><div class="l1">JEWEL GROUP</div><div class="l2">Right to Work Portal</div></div>
+    </div>
+    <span class="status-chip">INTERNAL · COMPLIANCE</span>
+  </div>
+</div>
+
+<div class="hero">
+  <div class="hero-inner">
+    <h1>Right to Work Check</h1>
+    <p>Guided statutory check for every new individual engagement across the Jewel group, in force for engagements starting on or after 1 October 2026.</p>
+    <span class="rule">&#9888;&#65038; No completed check, no start - no exceptions</span>
+  </div>
+</div>
+
+<main>
+  <div class="rail" id="rail">
+    <div class="rail-step" data-for="step1"><span class="dot">1</span>Details</div>
+    <div class="rail-step" data-for="step2"><span class="dot">2</span>Engagement</div>
+    <div class="rail-step" data-for="step3"><span class="dot">3</span>Route</div>
+    <div class="rail-step" data-for="step4"><span class="dot">4</span>Confirmations</div>
+    <div class="rail-step" data-for="step5"><span class="dot">5</span>Expiry</div>
+    <div class="rail-step" data-for="step6"><span class="dot">6</span>Outcome</div>
+  </div>
+
+  <div id="printhead">
+    <h1>Jewel Group - Right to Work Check Record</h1>
+    <p>Generated by the Jewel Group RTW Portal. File with the check evidence. Retain for the engagement plus two years.</p>
+  </div>
+
+  <div class="card" id="step1">
+    <h2><span class="stepnum">1</span>Who is being engaged, and by whom? <span class="tick">&#10003; Complete</span></h2>
+    <label>Engaging company (select all that apply - one register row is produced per company)</label>
+    <div class="entities" id="entityChips"></div>
+    <div class="grid2">
+      <div><label for="fullName">Full name of individual</label><input type="text" id="fullName" placeholder="e.g. John Smith"></div>
+      <div><label for="trade">Trade / role</label><input type="text" id="trade" placeholder="e.g. Fire stopping operative"></div>
+      <div><label for="startDate">Start date of engagement</label><input type="date" id="startDate"></div>
+      <div><label for="checkedBy">Person carrying out the check</label><input type="text" id="checkedBy" placeholder="Your name"></div>
+    </div>
+  </div>
+
+  <div class="card" id="step2">
+    <h2><span class="stepnum">2</span>Engagement type <span class="tick">&#10003; Complete</span></h2>
+    <div class="radio-group" id="engType"></div>
+    <div id="ltdBanner" class="banner info hidden">A limited company subcontractor with its own employees checks its own staff. No check by us, but confirm the RTW warranty is in the subcontract. You can still log this below for the record.</div>
+    <div id="preOctBanner" class="banner info hidden">Start date is before 1 October 2026: a check is only legally required for employees. It is still good practice to run one - continuing records a voluntary check. A re-engagement after a break on or after 1 October needs a full check.</div>
+  </div>
+
+  <div class="card" id="step3">
+    <h2><span class="stepnum">3</span>Route <span class="tick">&#10003; Complete</span></h2>
+    <div class="radio-group" id="routeGroup">
+      <div class="radio-opt" data-route="online">Non-UK national - Home Office online check with share code (free)</div>
+      <div class="radio-opt" data-route="manual">British or Irish passport holder - manual passport check</div>
+    </div>
+    <div id="onlineRoute" class="hidden">
+      <p class="muted">The individual gets their share code at <a href="https://www.gov.uk/prove-right-to-work" target="_blank">gov.uk/prove-right-to-work</a>. You check it at <a href="https://www.gov.uk/view-right-to-work" target="_blank">gov.uk/view-right-to-work</a> - when asked for the organisation carrying out the check, enter the engaging company's full name exactly. Codes are valid for 90 days.</p>
+      <div class="grid2">
+        <div><label for="shareCode">Share code</label><input type="text" id="shareCode" placeholder="e.g. W12 345 678"></div>
+        <div><label for="dob">Date of birth</label><input type="date" id="dob"></div>
+      </div>
+    </div>
+    <div id="manualRoute" class="hidden">
+      <p class="muted">You must be holding the original passport, with the individual present in person or on a live video call. The passport must be current - the draft Home Office guidance does not accept expired passports for manual checks. Copy every relevant page (photo, date of birth, nationality, signature, expiry) and mark the copy: "The date on which this right to work check was made: [date]".</p>
+      <label for="docDetail">Document seen (type and number)</label>
+      <input type="text" id="docDetail" placeholder="e.g. British passport 123456789">
+    </div>
+  </div>
+
+  <div class="card" id="step4">
+    <h2><span class="stepnum">4</span>Confirmations <span class="tick">&#10003; Complete</span></h2>
+    <label class="checkitem"><input type="checkbox" id="c1"><span>The document or online profile is genuine and current (or an in-date share code result), and permits the work in question.</span></label>
+    <label class="checkitem"><input type="checkbox" id="c2"><span>The photo and date of birth match the individual, checked in person or on a live video call (likeness check).</span></label>
+    <label class="checkitem"><input type="checkbox" id="c3"><span>Evidence saved to the restricted RTW folder, in the engaging company's subfolder: PDF of the online result, or the passport copy marked "The date on which this right to work check was made: [date]" plus my name.</span></label>
+    <label for="evidenceRef">Evidence file reference</label>
+    <input type="text" id="evidenceRef" placeholder="e.g. Smith_J_JPS_011026.pdf">
+  </div>
+
+  <div class="card" id="step5">
+    <h2><span class="stepnum">5</span>Time-limited permission? <span class="tick">&#10003; Complete</span></h2>
+    <div class="radio-group" id="limitedGroup">
+      <div class="radio-opt" data-lim="no">No - permission is not time-limited</div>
+      <div class="radio-opt" data-lim="yes">Yes - permission expires</div>
+    </div>
+    <div id="expiryWrap" class="hidden">
+      <label for="expiry">Permission expiry date</label>
+      <input type="date" id="expiry">
+      <p class="muted" id="followupNote"></p>
+    </div>
+  </div>
+
+  <div class="card" id="step6">
+    <h2><span class="stepnum">6</span>Outcome <span class="tick">&#10003; Complete</span></h2>
+    <div class="radio-group" id="outcomeGroup">
+      <div class="radio-opt" data-out="Pass">Pass - cleared to start</div>
+      <div class="radio-opt" data-out="Fail - do not start">Fail - do not start, refer to the procedure owner</div>
+    </div>
+    <div id="failBanner" class="banner stop hidden">Do not allow this individual to start. Tell the site manager and the procedure owner today.</div>
+    <button class="btn btn-gold no-print" id="generateBtn">Generate register entry &#8594;</button>
+  </div>
+
+  <div class="card hidden" id="result">
+    <h2>Completed check record</h2>
+    <div id="resultBanner"></div>
+    <dl class="summary-grid" id="summaryGrid"></dl>
+    <div class="no-print">
+      <label style="margin-top:16px">Register row(s) - paste into the group register (columns match exactly)</label>
+      <textarea id="rowOutput" readonly></textarea>
+    </div>
+    <button class="btn btn-primary no-print" id="copyBtn">Copy rows</button>
+    <button class="btn btn-secondary no-print" onclick="window.print()">Print / save as PDF</button>
+    <p class="muted no-print" id="saveStatus" aria-live="polite"></p>
+    <p class="muted">The printed record can be filed alongside the document copy or online check PDF as part of the evidence.</p>
+  </div>
+</main>
+
+<footer>
+  <span class="v">Jewel Group RTW Portal v1.1</span> · Internal compliance tool · Legal basis: Border Security, Asylum and Immigration Act 2025 s.48, in force for new engagements from 1 October 2026 · Evidence retained for the engagement plus two years · Contains personal data, handle under the group data protection rules · See the Group RTW Procedure for full detail
+</footer>
+
+<script>
+(function () {
+  var ENTITIES = ["JEL", "JBB", "JPS", "JPFP"];
+  var ENG_TYPES = [
+    "Employee",
+    "Sole-trader subcontractor",
+    "Casual / temporary worker",
+    "Platform engagement",
+    "Ltd co subcontractor (no check - own staff)"
+  ];
+  var state = { entities: [], engType: null, route: null, limited: null, outcome: null };
+
+  var chips = document.getElementById("entityChips");
+  ENTITIES.forEach(function (e) {
+    var c = document.createElement("div");
+    c.className = "chip"; c.textContent = e;
+    c.onclick = function () {
+      var i = state.entities.indexOf(e);
+      if (i >= 0) { state.entities.splice(i, 1); c.classList.remove("on"); }
+      else { state.entities.push(e); c.classList.add("on"); }
+      refresh();
+    };
+    chips.appendChild(c);
+  });
+
+  function radio(containerId, items, attr, onPick) {
+    var box = document.getElementById(containerId);
+    var opts = items.length ? items.map(function (t) {
+      var d = document.createElement("div");
+      d.className = "radio-opt"; d.textContent = t; d.setAttribute(attr, t);
+      box.appendChild(d); return d;
+    }) : Array.prototype.slice.call(box.querySelectorAll(".radio-opt"));
+    opts.forEach(function (d) {
+      d.onclick = function () {
+        opts.forEach(function (o) { o.classList.remove("on"); });
+        d.classList.add("on");
+        onPick(d.getAttribute(attr));
+        refresh();
+      };
+    });
+  }
+
+  radio("engType", ENG_TYPES, "data-val", function (v) {
+    state.engType = v;
+    document.getElementById("ltdBanner").classList.toggle("hidden", v.indexOf("Ltd co") !== 0);
+    checkPreOct();
+  });
+
+  document.getElementById("startDate").addEventListener("change", function(){ checkPreOct(); refresh(); });
+  function checkPreOct() {
+    var sd = document.getElementById("startDate").value;
+    var show = sd && sd < "2026-10-01" && state.engType && state.engType !== "Employee" && state.engType.indexOf("Ltd co") !== 0;
+    document.getElementById("preOctBanner").classList.toggle("hidden", !show);
+  }
+
+  radio("routeGroup", [], "data-route", function (v) {
+    state.route = v;
+    document.getElementById("onlineRoute").classList.toggle("hidden", v !== "online");
+    document.getElementById("manualRoute").classList.toggle("hidden", v !== "manual");
+  });
+
+  radio("limitedGroup", [], "data-lim", function (v) {
+    state.limited = v;
+    document.getElementById("expiryWrap").classList.toggle("hidden", v !== "yes");
+  });
+
+  document.getElementById("expiry").addEventListener("change", function () {
+    var d = this.value;
+    if (!d) return;
+    var f = followupDate(d);
+    document.getElementById("followupNote").textContent =
+      "Follow-up check due by " + ukDate(f) + " (four weeks before expiry). Diarise it now as well as recording it in the register. Work must not continue past " + ukDate(d) + " without a new check.";
+    refresh();
+  });
+
+  radio("outcomeGroup", [], "data-out", function (v) {
+    state.outcome = v;
+    document.getElementById("failBanner").classList.toggle("hidden", v === "Pass");
+  });
+
+  ["fullName","trade","checkedBy","shareCode","dob","docDetail","evidenceRef"].forEach(function(id){
+    document.getElementById(id).addEventListener("input", refresh);
+  });
+  ["c1","c2","c3"].forEach(function(id){ document.getElementById(id).addEventListener("change", refresh); });
+
+  function sectionComplete(n) {
+    var isLtd = state.engType && state.engType.indexOf("Ltd co") === 0;
+    switch (n) {
+      case 1: return state.entities.length > 0 && val("fullName") && val("startDate") && val("checkedBy");
+      case 2: return !!state.engType;
+      case 3: if (isLtd) return true;
+              if (state.route === "online") return val("shareCode") && val("dob");
+              if (state.route === "manual") return val("docDetail");
+              return false;
+      case 4: return isLtd || (chk("c1") && chk("c2") && chk("c3"));
+      case 5: return isLtd || state.limited === "no" || (state.limited === "yes" && val("expiry"));
+      case 6: return isLtd || !!state.outcome;
+    }
+  }
+  function val(id){ return document.getElementById(id).value.trim() !== ""; }
+  function chk(id){ return document.getElementById(id).checked; }
+
+  function refresh() {
+    for (var n = 1; n <= 6; n++) {
+      var done = !!sectionComplete(n);
+      document.getElementById("step" + n).classList.toggle("complete", done);
+      var rs = document.querySelector('.rail-step[data-for="step' + n + '"]');
+      rs.classList.toggle("done", done);
+      rs.querySelector(".dot").innerHTML = done ? "&#10003;" : String(n);
+    }
+  }
+
+  function followupDate(iso) {
+    var p = iso.split("-");
+    var dt = new Date(Date.UTC(+p[0], +p[1] - 1, +p[2]));
+    dt.setUTCDate(dt.getUTCDate() - 28);
+    return dt.toISOString().slice(0, 10);
+  }
+  function ukDate(iso) {
+    if (!iso) return "";
+    var p = iso.split("-");
+    return p[2] + "/" + p[1] + "/" + p[0];
+  }
+  function todayISO() {
+    var n = new Date();
+    return n.getFullYear() + "-" + String(n.getMonth() + 1).padStart(2, "0") + "-" + String(n.getDate()).padStart(2, "0");
+  }
+
+  document.getElementById("generateBtn").onclick = function () {
+    var name = document.getElementById("fullName").value.trim();
+    var errs = [];
+    if (!state.entities.length) errs.push("select at least one engaging company");
+    if (!name) errs.push("enter the individual's full name");
+    if (!document.getElementById("startDate").value) errs.push("enter the start date");
+    if (!document.getElementById("checkedBy").value.trim()) errs.push("enter your name as checker");
+    if (!state.engType) errs.push("select the engagement type");
+    var isLtd = state.engType && state.engType.indexOf("Ltd co") === 0;
+    if (!isLtd) {
+      if (!state.route) errs.push("select the check route");
+      if (!(chk("c1") && chk("c2") && chk("c3"))) errs.push("tick all three confirmations");
+      if (!state.limited) errs.push("answer the time-limited question");
+      if (state.limited === "yes" && !document.getElementById("expiry").value) errs.push("enter the expiry date");
+      if (!state.outcome) errs.push("select the outcome");
+    }
+    if (errs.length) { alert("Before generating: " + errs.join("; ") + "."); return; }
+
+    var trade = document.getElementById("trade").value.trim();
+    var start = document.getElementById("startDate").value;
+    var checker = document.getElementById("checkedBy").value.trim();
+    var method = isLtd ? "Not required" :
+      (state.route === "online" ? "Home Office online (share code)" : "Manual document check");
+    var docSeen = isLtd ? "n/a - checks own staff" :
+      (state.route === "online"
+        ? ("Share code " + document.getElementById("shareCode").value.trim() + ", DOB " + ukDate(document.getElementById("dob").value))
+        : document.getElementById("docDetail").value.trim());
+    var outcome = isLtd ? "n/a" : state.outcome;
+    var expiry = (state.limited === "yes") ? document.getElementById("expiry").value : "";
+    var follow = expiry ? followupDate(expiry) : "";
+    var evidence = document.getElementById("evidenceRef").value.trim();
+    var checkDate = isLtd ? "" : todayISO();
+    var notes = [];
+    if (isLtd) notes.push("Ltd co with own staff - confirm RTW warranty in subcontract");
+    if (state.entities.length > 1) notes.push("Engaged by " + state.entities.length + " entities - one row and one evidence file per entity");
+    if (start < "2026-10-01" && !isLtd && state.engType !== "Employee") notes.push("Voluntary check - engagement pre-dates 1 Oct 2026");
+
+    var rows = state.entities.map(function (ent) {
+      return ["", ent, name, trade, state.engType, ukDate(start), method, docSeen,
+        ukDate(checkDate), checker, outcome, ukDate(expiry), ukDate(follow), evidence, notes.join(". ")].join("\t");
+    });
+    document.getElementById("rowOutput").value = rows.join("\n");
+
+    var banner = document.getElementById("resultBanner");
+    if (isLtd) { banner.className = "banner info"; banner.innerHTML = "No check required by us. Confirm the RTW warranty is in the subcontract before they start."; }
+    else if (outcome === "Pass") { banner.className = "banner ok"; banner.innerHTML = '<span class="pill pass">PASS</span> &nbsp;' + name + " is cleared to start for: " + state.entities.join(", ") + "."; }
+    else { banner.className = "banner stop"; banner.innerHTML = '<span class="pill fail">FAIL</span> &nbsp;' + name + " must not start. Refer to the procedure owner today."; }
+
+    var pairs = [
+      ["Individual", name + (trade ? " (" + trade + ")" : "")],
+      ["Engaging company", state.entities.join(", ")],
+      ["Engagement type", state.engType],
+      ["Start date", ukDate(start)],
+      ["Check method", method],
+      ["Document / code", docSeen],
+      ["Check date", checkDate ? ukDate(checkDate) : "n/a"],
+      ["Checked by", checker],
+      ["Outcome", outcome],
+      ["Permission expiry", expiry ? ukDate(expiry) : "None"],
+      ["Follow-up due", follow ? ukDate(follow) : "None"],
+      ["Evidence ref", evidence || "[not entered]"]
+    ];
+    var grid = document.getElementById("summaryGrid");
+    grid.innerHTML = "";
+    pairs.forEach(function (p2) {
+      var dt = document.createElement("dt"); dt.textContent = p2[0];
+      var dd = document.createElement("dd"); dd.textContent = p2[1];
+      grid.appendChild(dt); grid.appendChild(dd);
+    });
+
+    // v1.1: also save the entries to the site's register log (viewed at
+    // /admin/rtw). Runs alongside copy/print - a failed save never blocks
+    // the check, and nothing else about the tool changes.
+    saveToLog(state.entities.map(function (ent) {
+      return {
+        entity: ent, full_name: name, trade: trade, engagement_type: state.engType,
+        start_date: start, check_method: method, document_seen: docSeen,
+        check_date: checkDate, checked_by: checker, outcome: outcome,
+        permission_expiry: expiry, followup_due: follow, evidence_ref: evidence,
+        notes: notes.join(". ")
+      };
+    }));
+
+    document.getElementById("result").classList.remove("hidden");
+    document.getElementById("result").scrollIntoView({ behavior: "smooth" });
+  };
+
+  var lastSavedKey = "";
+  function saveToLog(entries) {
+    var s = document.getElementById("saveStatus");
+    var key = JSON.stringify(entries);
+    if (key === lastSavedKey) { s.textContent = "Already saved to the register log."; return; }
+    s.textContent = "Saving to the register log…";
+    if (!window.fetch) {
+      s.textContent = "Could not save to the register log - copy the rows into the register as usual.";
+      return;
+    }
+    fetch("/rtw/submit", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ entries: entries })
+    }).then(function (r) { return r.ok ? r.json() : Promise.reject(); })
+      .then(function (d) {
+        lastSavedKey = key;
+        s.textContent = "Saved to the register log (" + d.saved + (d.saved === 1 ? " row" : " rows") + "). Still paste the rows into the group register.";
+      })
+      .catch(function () {
+        s.textContent = "Could not save to the register log - copy the rows into the register as usual and tell the site admin.";
+      });
+  }
+
+  document.getElementById("copyBtn").onclick = function () {
+    var ta = document.getElementById("rowOutput");
+    ta.select();
+    ta.setSelectionRange(0, 999999);
+    var done = false;
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(ta.value).then(function () {}).catch(function () {});
+      done = true;
+    }
+    if (!done) { try { document.execCommand("copy"); } catch (e) {} }
+    var b = document.getElementById("copyBtn");
+    b.textContent = "Copied";
+    setTimeout(function () { b.textContent = "Copy rows"; }, 1600);
+  };
+})();
+</script>
+</body>
+</html>

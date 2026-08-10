@@ -40,6 +40,11 @@
 		<p>{data.sectionCount === null ? '—' : data.sectionCount} sections</p>
 		<span>Edit content, then share or print /brochure →</span>
 	</a>
+	<a class="card tile" href="/admin/rtw">
+		<h2>RTW checks</h2>
+		<p>{data.rtwCount === null ? '—' : data.rtwCount} logged submissions</p>
+		<span>Right to Work checks completed at /rtw →</span>
+	</a>
 </div>
 
 <style>

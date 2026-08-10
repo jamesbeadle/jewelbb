@@ -19,6 +19,7 @@
 					<li><a href="/admin/projects" aria-current={page.url.pathname.startsWith('/admin/projects') ? 'page' : undefined}>Projects</a></li>
 					<li><a href="/admin/staff" aria-current={page.url.pathname.startsWith('/admin/staff') ? 'page' : undefined}>Staff</a></li>
 					<li><a href="/admin/brochure" aria-current={page.url.pathname.startsWith('/admin/brochure') ? 'page' : undefined}>Brochure</a></li>
+					<li><a href="/admin/rtw" aria-current={page.url.pathname.startsWith('/admin/rtw') ? 'page' : undefined}>RTW checks</a></li>
 					<li><a href="/" target="_blank" rel="noopener">View site ↗</a></li>
 				</ul>
 				<form method="POST" action="/admin/logout">
