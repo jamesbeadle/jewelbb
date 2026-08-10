@@ -127,6 +127,8 @@ img {
 .btn {
 	display: inline-flex;
 	align-items: center;
+	justify-content: center;
+	text-align: center;
 	gap: 0.5rem;
 	padding: 0.85rem 1.7rem;
 	border-radius: 999px;
