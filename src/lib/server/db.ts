@@ -13,6 +13,20 @@ export interface TeamMemberRow {
 	sort_order: number;
 }
 
+export interface ProjectRow {
+	id: string;
+	slug: string;
+	name: string;
+	meta_title: string;
+	meta_description: string;
+	subtitle: string;
+	description: string;
+	gallery: string[];
+	cross_link: string;
+	accessible: boolean;
+	sort_order: number;
+}
+
 export interface BrochureSectionRow {
 	id: string;
 	title: string;

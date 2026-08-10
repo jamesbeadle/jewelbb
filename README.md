@@ -85,12 +85,21 @@ In Vercel → Project → Settings → Domains, add `www.jewelbb.co.uk` and `jew
 
 Vercel shows the exact records to set and verifies them live. Old Wix URLs are preserved (`/copy-of-privacy-policy` 301-redirects to `/terms-and-conditions`).
 
-## Content still hosted on Wix
+## Images
 
-Images (and the brochure PDF) are currently hot-linked from `static.wixstatic.com` — they keep working while the Wix account exists. **Before cancelling Wix**, download the images into `static/images/` and update `src/lib/data/images.ts` + `src/lib/data/projects.ts` accordingly (the registry was designed to make this a find-and-replace job).
+All site images are self-hosted — nothing depends on Wix any more:
+
+- `static/images/` — logo, hero shots, accreditation badges, team photos and the
+  seeded project galleries (served straight from Vercel's CDN).
+- Supabase Storage (`media` bucket) — photos uploaded through `/admin`
+  (staff photos and new project gallery images).
+
+The Wix account can be cancelled once DNS has been moved.
 
 ## Notes
 
 - The old Wix "Members" area was intentionally not migrated.
+- Portfolio projects are editable in `/admin` → Projects (stored in Supabase;
+  `src/lib/data/projects.ts` is the fallback used until Supabase is connected).
 - All pages are prerendered (static) except `/api/contact` (serverless function for the form).
 - The sitemap is generated at build time at `/sitemap.xml`.

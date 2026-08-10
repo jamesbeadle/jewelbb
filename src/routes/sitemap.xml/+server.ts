@@ -1,9 +1,10 @@
 import { site } from '$lib/data/site';
-import { projects } from '$lib/data/projects';
+import { getProjects } from '$lib/server/projects';
 import { posts } from '$lib/blog';
 import type { RequestHandler } from './$types';
 
-export const prerender = true;
+// Rendered per-request so projects added in /admin appear automatically.
+export const prerender = false;
 
 const staticPaths = [
 	'',
@@ -18,7 +19,8 @@ const staticPaths = [
 	'/terms-and-conditions'
 ];
 
-export const GET: RequestHandler = () => {
+export const GET: RequestHandler = async () => {
+	const projects = await getProjects();
 	const urls = [
 		...staticPaths,
 		...projects.map((p) => `/${p.slug}`),

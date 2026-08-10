@@ -25,6 +25,11 @@
 {/if}
 
 <div class="tiles">
+	<a class="card tile" href="/admin/projects">
+		<h2>Projects</h2>
+		<p>{data.projectCount === null ? '—' : data.projectCount} portfolio projects</p>
+		<span>Manage pages, descriptions and photo galleries →</span>
+	</a>
 	<a class="card tile" href="/admin/staff">
 		<h2>Staff</h2>
 		<p>{data.staffCount === null ? '—' : data.staffCount} team members</p>
@@ -65,6 +70,10 @@
 		.tiles {
 			grid-template-columns: 1fr 1fr;
 			max-width: 46rem;
+		}
+
+		.tile:first-child {
+			grid-column: 1 / -1;
 		}
 	}
 

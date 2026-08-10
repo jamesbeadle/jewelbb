@@ -7,9 +7,10 @@
 	import { images } from '$lib/data/images';
 	import { services } from '$lib/data/services';
 	import { testimonials } from '$lib/data/testimonials';
-	import { projects } from '$lib/data/projects';
 
-	const featured = projects.filter((p) => p.gallery.length > 0).slice(0, 3);
+	let { data } = $props();
+
+	const featured = $derived(data.featured);
 
 	const jsonLd = {
 		'@context': 'https://schema.org',

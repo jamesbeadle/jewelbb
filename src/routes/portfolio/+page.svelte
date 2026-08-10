@@ -1,9 +1,10 @@
 <script lang="ts">
 	import Seo from '$lib/components/Seo.svelte';
 	import CtaBand from '$lib/components/CtaBand.svelte';
-	import { projects } from '$lib/data/projects';
 
-	const live = projects.filter((p) => p.gallery.length > 0);
+	let { data } = $props();
+
+	const live = $derived(data.projects.filter((p) => p.gallery.length > 0));
 
 	let filter: 'all' | 'accessible' = $state('all');
 

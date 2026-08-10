@@ -16,6 +16,7 @@
 			<div class="container admin__nav-inner">
 				<a href="/admin" class="admin__brand">Jewel · Admin</a>
 				<ul>
+					<li><a href="/admin/projects" aria-current={page.url.pathname.startsWith('/admin/projects') ? 'page' : undefined}>Projects</a></li>
 					<li><a href="/admin/staff" aria-current={page.url.pathname.startsWith('/admin/staff') ? 'page' : undefined}>Staff</a></li>
 					<li><a href="/admin/brochure" aria-current={page.url.pathname.startsWith('/admin/brochure') ? 'page' : undefined}>Brochure</a></li>
 					<li><a href="/" target="_blank" rel="noopener">View site ↗</a></li>

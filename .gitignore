@@ -11,3 +11,8 @@ vite.config.ts.timestamp-*
 
 .vercel
 .env*
+
+# migration helpers (not part of the site)
+_to_delete/
+RUN-ME-download-images.bat
+download_wix_images.ps1
