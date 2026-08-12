@@ -156,3 +156,28 @@ create index if not exists rtw_submissions_created_at_idx
 	on public.rtw_submissions (created_at desc);
 
 alter table public.rtw_submissions enable row level security;
+
+-- ---------- Website enquiries (added 2026-08-12) ------------------
+-- "Request a free quote" form submissions from /contact. Written by
+-- the server at /api/contact, viewed and managed at /admin/enquiries.
+-- No email integration — the admin area is the inbox.
+-- RLS on, no policies: service role only, same as the other tables.
+
+create table if not exists public.enquiries (
+	id uuid primary key default gen_random_uuid(),
+	first_name text not null,
+	last_name text not null,
+	email text not null,
+	phone text not null default '',
+	message text not null,
+	status text not null default 'new',     -- new | read | archived
+	created_at timestamptz not null default now()
+);
+
+create index if not exists enquiries_created_at_idx
+	on public.enquiries (created_at desc);
+
+create index if not exists enquiries_status_idx
+	on public.enquiries (status);
+
+alter table public.enquiries enable row level security;

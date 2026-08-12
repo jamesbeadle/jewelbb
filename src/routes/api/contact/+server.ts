@@ -1,5 +1,5 @@
 import { json } from '@sveltejs/kit';
-import { env } from '$env/dynamic/private';
+import { dbConfigured, dbInsert } from '$lib/server/db';
 import type { RequestHandler } from './$types';
 
 export const prerender = false;
@@ -12,9 +12,6 @@ interface ContactPayload {
 	message?: string;
 	company?: string; // honeypot
 }
-
-const esc = (s: string) =>
-	s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
 export const POST: RequestHandler = async ({ request }) => {
 	let payload: ContactPayload;
@@ -41,43 +38,24 @@ export const POST: RequestHandler = async ({ request }) => {
 		return json({ error: 'Please provide a valid email address.' }, { status: 400 });
 	}
 
-	const apiKey = env.RESEND_API_KEY;
-	if (!apiKey) {
+	if (!dbConfigured()) {
 		return json(
 			{ error: 'The contact form is not configured yet. Please email us directly.' },
 			{ status: 503 }
 		);
 	}
 
-	const to = env.CONTACT_TO_EMAIL ?? 'sales@jewelbb.co.uk';
-	const from = env.CONTACT_FROM_EMAIL ?? 'onboarding@resend.dev';
-
-	const html = `
-		<h2>New website enquiry</h2>
-		<p><strong>Name:</strong> ${esc(firstName)} ${esc(lastName)}</p>
-		<p><strong>Email:</strong> ${esc(email)}</p>
-		<p><strong>Phone:</strong> ${esc(phone) || '—'}</p>
-		<p><strong>Message:</strong></p>
-		<p>${esc(message).replace(/\n/g, '<br />')}</p>
-	`;
-
-	const res = await fetch('https://api.resend.com/emails', {
-		method: 'POST',
-		headers: {
-			Authorization: `Bearer ${apiKey}`,
-			'Content-Type': 'application/json'
-		},
-		body: JSON.stringify({
-			from: `Jewel Website <${from}>`,
-			to: [to],
-			reply_to: email,
-			subject: `Website enquiry from ${firstName} ${lastName}`,
-			html
-		})
-	});
-
-	if (!res.ok) {
-		console.error('Resend error', res.status, await res.text().catch(() => ''));
+	try {
+		await dbInsert('enquiries', {
+			first_name: firstName,
+			last_name: lastName,
+			email,
+			phone,
+			message,
+			status: 'new'
+		});
+	} catch (e) {
+		console.error('Enquiry insert failed', e instanceof Error ? e.message : e);
 		return json(
 			{ error: 'We could not send your message right now. Please try again or email us directly.' },
 			{ status: 502 }

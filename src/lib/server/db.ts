@@ -47,6 +47,17 @@ export interface RtwSubmissionRow {
 	created_at: string;
 }
 
+export interface EnquiryRow {
+	id: string;
+	first_name: string;
+	last_name: string;
+	email: string;
+	phone: string;
+	message: string;
+	status: 'new' | 'read' | 'archived';
+	created_at: string;
+}
+
 export interface BrochureSectionRow {
 	id: string;
 	title: string;
