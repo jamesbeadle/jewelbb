@@ -10,7 +10,8 @@ interface ContactPayload {
 	email?: string;
 	phone?: string;
 	message?: string;
-	company?: string; // honeypot
+	xtrafld?: string; // honeypot (meaningless name so browser autofill ignores it)
+	company?: string; // legacy honeypot name — still honoured for cached pages
 }
 
 export const POST: RequestHandler = async ({ request }) => {
@@ -26,10 +27,14 @@ export const POST: RequestHandler = async ({ request }) => {
 	const email = (payload.email ?? '').trim().slice(0, 200);
 	const phone = (payload.phone ?? '').trim().slice(0, 50);
 	const message = (payload.message ?? '').trim().slice(0, 5000);
-	const honeypot = (payload.company ?? '').trim();
+	const honeypot = `${payload.xtrafld ?? ''}${payload.company ?? ''}`.trim();
 
 	// Bots fill the hidden field — pretend success and drop it.
-	if (honeypot) return json({ ok: true });
+	// Logged so a false positive is visible in the Vercel function logs.
+	if (honeypot) {
+		console.warn('Contact honeypot triggered — submission dropped (not saved).');
+		return json({ ok: true });
+	}
 
 	if (!firstName || !lastName || !message) {
 		return json({ error: 'Please fill in your name and a message.' }, { status: 400 });

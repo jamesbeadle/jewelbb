@@ -11,7 +11,10 @@
 	let email = $state('');
 	let phone = $state('');
 	let message = $state('');
-	let company = $state(''); // honeypot — humans never see or fill this
+	// Honeypot — humans never see or fill this. Deliberately meaningless
+	// name: real names like "company" get filled by browser autofill,
+	// which made the server drop genuine submissions as spam.
+	let trapField = $state('');
 
 	async function submit(e: SubmitEvent) {
 		e.preventDefault();
@@ -23,7 +26,7 @@
 			const res = await fetch('/api/contact', {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ firstName, lastName, email, phone, message, company })
+				body: JSON.stringify({ firstName, lastName, email, phone, message, xtrafld: trapField })
 			});
 			const body = await res.json().catch(() => ({}));
 			if (!res.ok) {
@@ -80,8 +83,8 @@
 
 		<div class="form__hp" aria-hidden="true">
 			<label>
-				Company
-				<input type="text" name="company" tabindex="-1" autocomplete="off" bind:value={company} />
+				Leave this field empty
+				<input type="text" name="xtrafld" tabindex="-1" autocomplete="one-time-code" bind:value={trapField} />
 			</label>
 		</div>
 
