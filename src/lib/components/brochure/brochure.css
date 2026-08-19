@@ -1,0 +1,224 @@
+/* ---------------------------------------------------------------------------
+   Jewel Bespoke Build — brochure design system
+   A faithful recreation of the designed 2026 print brochure:
+   warm cream stock, Cormorant Garamond display serif, letter-spaced
+   terracotta kickers, dark footer band. All sizes in mm/pt so the
+   rendered page is exactly A4 both on screen and in the generated PDF.
+--------------------------------------------------------------------------- */
+
+@font-face {
+	font-family: 'Cormorant Garamond';
+	font-style: normal;
+	font-weight: 400;
+	src: url('/fonts/cormorant-garamond-latin-400-normal.woff2') format('woff2');
+}
+@font-face {
+	font-family: 'Cormorant Garamond';
+	font-style: italic;
+	font-weight: 400;
+	src: url('/fonts/cormorant-garamond-latin-400-italic.woff2') format('woff2');
+}
+@font-face {
+	font-family: 'Cormorant Garamond';
+	font-style: normal;
+	font-weight: 500;
+	src: url('/fonts/cormorant-garamond-latin-500-normal.woff2') format('woff2');
+}
+@font-face {
+	font-family: 'Cormorant Garamond';
+	font-style: normal;
+	font-weight: 600;
+	src: url('/fonts/cormorant-garamond-latin-600-normal.woff2') format('woff2');
+}
+@font-face {
+	font-family: 'Brochure Sans';
+	font-style: normal;
+	font-weight: 400;
+	src: url('/fonts/open-sans-latin-400-normal.woff2') format('woff2');
+}
+@font-face {
+	font-family: 'Brochure Sans';
+	font-style: italic;
+	font-weight: 400;
+	src: url('/fonts/open-sans-latin-400-italic.woff2') format('woff2');
+}
+@font-face {
+	font-family: 'Brochure Sans';
+	font-style: normal;
+	font-weight: 600;
+	src: url('/fonts/open-sans-latin-600-normal.woff2') format('woff2');
+}
+
+.bdoc {
+	--b-paper: #f7f2ea;
+	--b-paper-cover: #f9f5ef;
+	--b-ink: #3e3a35;
+	--b-ink-soft: #4c4741;
+	--b-ink-muted: #8d867e;
+	--b-accent: #b45f2d; /* terracotta kickers & rules */
+	--b-accent-deep: #9c5226;
+	--b-gold: #c19a52;
+	--b-dark: #211d1a; /* footer band / back cover */
+	--b-serif: 'Cormorant Garamond', 'Times New Roman', serif;
+	--b-sans: 'Brochure Sans', 'Open Sans', Arial, sans-serif;
+
+	font-family: var(--b-sans);
+	color: var(--b-ink);
+	-webkit-font-smoothing: antialiased;
+	text-rendering: optimizeLegibility;
+}
+
+/* ---- The page ----------------------------------------------------------- */
+.bpage {
+	position: relative;
+	width: 210mm;
+	height: 297mm;
+	background: var(--b-paper);
+	overflow: hidden;
+	page-break-after: always;
+	break-after: page;
+	display: flex;
+	flex-direction: column;
+}
+
+/* No break after the final sheet — avoids a trailing blank PDF page. */
+.bpage:last-child {
+	page-break-after: auto;
+	break-after: auto;
+}
+
+.bpage--cover {
+	background: var(--b-paper-cover);
+}
+
+.bpage--dark {
+	background: var(--b-dark);
+	color: #e8e3dc;
+}
+
+/* Standard content area inside a page */
+.bpage__body {
+	flex: 1;
+	padding: 24mm 22mm 14mm;
+	display: flex;
+	flex-direction: column;
+	min-height: 0;
+}
+
+/* ---- Type ---------------------------------------------------------------- */
+.b-kicker {
+	font-family: var(--b-sans);
+	font-size: 8.5pt;
+	font-weight: 600;
+	letter-spacing: 0.32em;
+	text-transform: uppercase;
+	color: var(--b-accent);
+	margin: 0 0 4.5mm;
+}
+
+.b-title {
+	font-family: var(--b-serif);
+	font-weight: 500;
+	font-size: 27pt;
+	line-height: 1.12;
+	color: var(--b-ink);
+	margin: 0 0 4mm;
+	letter-spacing: 0.01em;
+}
+
+.b-rule {
+	width: 26mm;
+	height: 0.6mm;
+	background: var(--b-accent);
+	border: 0;
+	margin: 0 0 8mm;
+}
+
+.b-body {
+	font-size: 9.5pt;
+	line-height: 1.65;
+	color: var(--b-ink-soft);
+}
+
+.b-body p {
+	margin: 0 0 3.2mm;
+}
+
+/* ---- Footer band --------------------------------------------------------- */
+.bpage__num {
+	position: absolute;
+	bottom: 11mm;
+	left: 0;
+	right: 0;
+	text-align: center;
+	font-size: 7pt;
+	letter-spacing: 0.12em;
+	color: var(--b-ink-muted);
+}
+
+.bpage__band {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	height: 7.5mm;
+	background: var(--b-dark);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.bpage__band span {
+	color: var(--b-accent);
+	font-size: 7.5pt;
+	letter-spacing: 0.06em;
+}
+
+/* ---- Wordmark ------------------------------------------------------------ */
+.b-wordmark {
+	text-align: center;
+}
+
+.b-wordmark__jewel {
+	font-family: var(--b-serif);
+	font-weight: 500;
+	font-size: 24pt;
+	letter-spacing: 0.42em;
+	margin-right: -0.42em; /* optically recentre the tracked text */
+	color: var(--b-accent);
+}
+
+.bpage--dark .b-wordmark__jewel {
+	color: var(--b-gold);
+}
+
+.b-wordmark__sub {
+	font-family: var(--b-sans);
+	font-size: 10pt;
+	font-weight: 600;
+	letter-spacing: 0.38em;
+	margin-right: -0.38em;
+	color: var(--b-accent);
+	margin-top: 2mm;
+}
+
+/* ---- Images -------------------------------------------------------------- */
+.b-img {
+	display: block;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+/* Placeholder shown where a photo hasn't been chosen yet */
+.b-img--empty {
+	background:
+		repeating-linear-gradient(45deg, #eee6da, #eee6da 6px, #e6ddd0 6px, #e6ddd0 12px);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: #b0a695;
+	font-size: 8pt;
+	letter-spacing: 0.12em;
+	text-transform: uppercase;
+}

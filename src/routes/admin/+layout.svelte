@@ -9,7 +9,7 @@
 		{ label: 'Enquiries', href: '/admin/enquiries' },
 		{ label: 'Projects', href: '/admin/projects' },
 		{ label: 'Staff', href: '/admin/staff' },
-		{ label: 'Brochure', href: '/admin/brochure' },
+		{ label: 'Brochures', href: '/admin/brochure' },
 		{ label: 'RTW checks', href: '/admin/rtw' }
 	];
 

@@ -35,10 +35,10 @@
 		},
 		{
 			href: '/admin/brochure',
-			title: 'Brochure',
+			title: 'Brochures',
 			count: data.sectionCount,
-			unit: 'sections',
-			blurb: 'Edit content, then share or print /brochure',
+			unit: 'brochures',
+			blurb: 'Build print-quality brochures, download as PDF',
 			icon: 'M5 3h14a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1zm3 5h8v2H8V8zm0 4h8v2H8v-2z'
 		},
 		{

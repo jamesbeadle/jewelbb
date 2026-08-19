@@ -52,13 +52,13 @@ Commit and push — the post appears at `/post/my-new-post` and in the sitemap a
 The site has a lightweight CMS at **`/admin`** (discrete link in the footer):
 
 - **Staff** — add/edit/reorder/delete team members shown on `/about`, including photo uploads.
-- **Brochure** — edit the sections of `/brochure`, a print-ready page visitors can save as a PDF. The footer "View our brochure" link points here.
+- **Brochures** — a full brochure builder. Compose print-quality brochures page by page from designed templates (cover, philosophy, team, services, three-page project spreads, process, testimonials, back cover), keep them in draft, and make one **active** — that's what visitors see at `/brochure` and download as a PDF. PDFs are rendered server-side with headless Chromium, so the output is identical to the designed A4 pages every time (no browser print dialogs involved). Photos upload straight to Supabase Storage at full resolution via signed URLs. Requires running `supabase/2026-08-19-brochures.sql` once (see below).
 
 Content lives in Supabase; uploaded images go to a public `media` storage bucket.
 
 **Setup (once):**
 
-1. In the Supabase dashboard open **SQL Editor**, paste the contents of `supabase/schema.sql`, and Run. This creates the tables, locks them down with RLS, creates the storage bucket, and seeds the current team + a starter brochure.
+1. In the Supabase dashboard open **SQL Editor**, paste the contents of `supabase/schema.sql`, and Run. This creates the tables, locks them down with RLS, creates the storage bucket, and seeds the current team + a starter brochure. Then run `supabase/2026-08-19-brochures.sql` the same way — it adds the `brochures` / `brochure_pages` tables used by the brochure builder.
 2. In **Project Settings → API**, copy the **Project URL** and the **service_role** key into the `SUPABASE_URL` / `SUPABASE_SERVICE_ROLE_KEY` env vars (locally in `.env`, and on Vercel).
 3. Set `ADMIN_USERNAME` / `ADMIN_PASSWORD` (and ideally `ADMIN_SESSION_SECRET`) env vars for the admin login.
 

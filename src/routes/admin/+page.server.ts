@@ -13,16 +13,21 @@ export const load: PageServerLoad = async () => {
 
 	if (dbConfigured()) {
 		try {
-			const [staff, sections, projects] = await Promise.all([
+			const [staff, projects] = await Promise.all([
 				dbSelect<{ id: string }>('team_members', 'select=id'),
-				dbSelect<{ id: string }>('brochure_sections', 'select=id'),
 				dbSelect<{ id: string }>('projects', 'select=id')
 			]);
 			staffCount = staff.length;
-			sectionCount = sections.length;
 			projectCount = projects.length;
 		} catch (e) {
 			dbError = (e instanceof Error ? e.message : 'Unknown error').slice(0, 400);
+		}
+		// New table (2026-08-19-brochures.sql) — may not exist yet.
+		try {
+			const brochures = await dbSelect<{ id: string }>('brochures', 'select=id');
+			sectionCount = brochures.length;
+		} catch {
+			sectionCount = null;
 		}
 		// Separate tries: these tables may not exist yet if schema.sql
 		// hasn't been re-run — don't let that break the tiles above.

@@ -66,6 +66,30 @@ export async function verifySessionToken(token: string | undefined): Promise<boo
 	return (await hmac(payload, secret())) === sig;
 }
 
+/* ---- Print tokens ---------------------------------------------------
+ * Short-lived, single-purpose tokens that let the headless PDF browser
+ * (and only it) open /brochure/print/[id] for a draft brochure without
+ * an admin cookie. Signed with the same secret as the session cookie.
+ */
+const PRINT_TOKEN_MINUTES = 10;
+
+export async function createPrintToken(brochureId: string): Promise<string> {
+	const expires = String(Date.now() + PRINT_TOKEN_MINUTES * 60_000);
+	const sig = await hmac(`print.${brochureId}.${expires}`, secret());
+	return `${expires}.${sig}`;
+}
+
+export async function verifyPrintToken(
+	brochureId: string,
+	token: string | null | undefined
+): Promise<boolean> {
+	if (!token || !secret()) return false;
+	const [expires, sig] = token.split('.');
+	if (!expires || !sig) return false;
+	if (Number(expires) < Date.now()) return false;
+	return (await hmac(`print.${brochureId}.${expires}`, secret())) === sig;
+}
+
 export function setSessionCookie(cookies: Cookies, token: string): void {
 	cookies.set(ADMIN_COOKIE, token, {
 		path: '/',

@@ -1,57 +1,79 @@
-import { error, fail, redirect } from '@sveltejs/kit';
+import { error, redirect } from '@sveltejs/kit';
 import {
-	dbDelete,
-	dbSelect,
-	dbUpdate,
-	storageUpload,
-	type BrochureSectionRow
-} from '$lib/server/db';
+	addPage,
+	addProjectPages,
+	deleteBrochure,
+	deletePage,
+	duplicatePage,
+	getBrochure,
+	movePage,
+	setActiveBrochure,
+	setDraftBrochure
+} from '$lib/server/brochures';
+import { getProjects } from '$lib/server/projects';
+import { dbUpdate } from '$lib/server/db';
+import type { TemplateId } from '$lib/brochure/templates';
 import type { Actions, PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ params }) => {
-	const rows = await dbSelect<BrochureSectionRow>(
-		'brochure_sections',
-		`select=*&id=eq.${encodeURIComponent(params.id)}`
-	);
-	if (!rows[0]) error(404, 'Section not found');
-	return { section: rows[0] };
+	const doc = await getBrochure(params.id);
+	if (!doc) error(404, 'Brochure not found');
+	const projects = await getProjects();
+	return { doc, projects: projects.map((p) => ({ slug: p.slug, name: p.name })) };
 };
 
 export const actions: Actions = {
-	save: async ({ params, request }) => {
+	rename: async ({ params, request }) => {
 		const form = await request.formData();
-		const patch: Record<string, unknown> = {
-			title: String(form.get('title') ?? '').trim(),
-			subtitle: String(form.get('subtitle') ?? '').trim(),
-			body: String(form.get('body') ?? ''),
-			sort_order: Number(form.get('sort_order') ?? 100) || 100
-		};
-
-		if (String(form.get('remove_image') ?? '') === 'on') {
-			patch.image_url = '';
+		const title = String(form.get('title') ?? '').trim();
+		if (title) {
+			await dbUpdate('brochures', params.id, { title, updated_at: new Date().toISOString() });
 		}
-
-		const image = form.get('image');
-		if (image instanceof File && image.size > 0) {
-			// Vercel serverless caps request bodies at ~4.5 MB
-			if (image.size > 4 * 1024 * 1024) {
-				return fail(400, { error: 'Image must be under 4 MB.' });
-			}
-			try {
-				patch.image_url = await storageUpload(image, 'brochure');
-			} catch (e) {
-				return fail(502, {
-					error: `Image upload failed: ${e instanceof Error ? e.message : 'unknown error'}`
-				});
-			}
-		}
-
-		await dbUpdate('brochure_sections', params.id, patch);
 		return { saved: true };
 	},
 
+	activate: async ({ params }) => {
+		await setActiveBrochure(params.id);
+	},
+
+	deactivate: async ({ params }) => {
+		await setDraftBrochure(params.id);
+	},
+
 	delete: async ({ params }) => {
-		await dbDelete('brochure_sections', params.id);
+		await deleteBrochure(params.id);
 		redirect(303, '/admin/brochure');
+	},
+
+	addPage: async ({ params, request }) => {
+		const form = await request.formData();
+		const template = String(form.get('template') ?? 'freeform') as TemplateId;
+		const page = await addPage(params.id, template);
+		redirect(303, `/admin/brochure/${params.id}/page/${page.id}`);
+	},
+
+	addProject: async ({ params, request }) => {
+		const form = await request.formData();
+		const slug = String(form.get('project') ?? '');
+		await addProjectPages(params.id, slug || undefined);
+	},
+
+	movePage: async ({ params, request }) => {
+		const form = await request.formData();
+		await movePage(
+			params.id,
+			String(form.get('page_id') ?? ''),
+			String(form.get('direction')) === 'up' ? 'up' : 'down'
+		);
+	},
+
+	duplicatePage: async ({ params, request }) => {
+		const form = await request.formData();
+		await duplicatePage(params.id, String(form.get('page_id') ?? ''));
+	},
+
+	deletePage: async ({ params, request }) => {
+		const form = await request.formData();
+		await deletePage(params.id, String(form.get('page_id') ?? ''));
 	}
 };
