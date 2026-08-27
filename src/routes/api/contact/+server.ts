@@ -1,5 +1,6 @@
 import { json } from '@sveltejs/kit';
 import { dbConfigured, dbInsert } from '$lib/server/db';
+import { emailConfigured, sendEnquiryEmail } from '$lib/server/email';
 import type { RequestHandler } from './$types';
 
 export const prerender = false;
@@ -65,6 +66,18 @@ export const POST: RequestHandler = async ({ request }) => {
 			{ error: 'We could not send your message right now. Please try again or email us directly.' },
 			{ status: 502 }
 		);
+	}
+
+	// Email notification is best-effort: the enquiry is already saved above,
+	// so a Resend failure is logged but never surfaced to the visitor.
+	if (emailConfigured()) {
+		try {
+			await sendEnquiryEmail({ firstName, lastName, email, phone, message });
+		} catch (e) {
+			console.error('Enquiry email failed', e instanceof Error ? e.message : e);
+		}
+	} else {
+		console.warn('Enquiry email skipped — Resend env vars not configured.');
 	}
 
 	return json({ ok: true });
