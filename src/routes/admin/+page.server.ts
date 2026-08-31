@@ -5,6 +5,7 @@ export const load: PageServerLoad = async () => {
 	let staffCount: number | null = null;
 	let sectionCount: number | null = null;
 	let projectCount: number | null = null;
+	let badgeCount: number | null = null;
 	let rtwCount: number | null = null;
 	let enquiryCount: number | null = null;
 	let newEnquiryCount = 0;
@@ -32,6 +33,11 @@ export const load: PageServerLoad = async () => {
 		// Separate tries: these tables may not exist yet if schema.sql
 		// hasn't been re-run — don't let that break the tiles above.
 		try {
+			badgeCount = await dbCount('badges');
+		} catch {
+			badgeCount = null;
+		}
+		try {
 			rtwCount = await dbCount('rtw_submissions');
 		} catch {
 			rtwCount = null;
@@ -55,6 +61,7 @@ export const load: PageServerLoad = async () => {
 		staffCount,
 		sectionCount,
 		projectCount,
+		badgeCount,
 		rtwCount,
 		enquiryCount,
 		newEnquiryCount,

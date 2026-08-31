@@ -181,3 +181,33 @@ create index if not exists enquiries_status_idx
 	on public.enquiries (status);
 
 alter table public.enquiries enable row level security;
+
+-- ---------- Accreditation badges (added 2026-08-31) ---------------
+-- The strip of accreditation/partnership logos on the homepage.
+-- Managed at /admin/badges (add, hide, reorder, replace, delete).
+-- Until this table exists the site falls back to the static list in
+-- src/lib/data/images.ts. RLS on, no policies: service role only,
+-- same as the other tables.
+
+create table if not exists public.badges (
+	id uuid primary key default gen_random_uuid(),
+	label text not null default '',        -- alt text / accessible name
+	image_url text not null default '',
+	visible boolean not null default true,
+	sort_order int not null default 100,
+	created_at timestamptz not null default now()
+);
+
+alter table public.badges enable row level security;
+
+-- ---------- Seed: current badges (only if table is empty) ---------
+
+insert into public.badges (label, image_url, visible, sort_order)
+select * from (values
+	('Considerate Constructors Scheme accreditation', '/images/badges/considerate-constructors.png', true, 10),
+	('SafeContractor accreditation', '/images/badges/safecontractor.png', true, 20),
+	('Best of Houzz 2021 — Service', '/images/badges/houzz.png', true, 30),
+	('Buildertrend construction management software', '/images/badges/buildertrend.png', true, 40),
+	('Official sponsor of Epsom & Ewell Colts FC', '/images/badges/ee-colts.jpg', true, 50)
+) as seed(label, image_url, visible, sort_order)
+where not exists (select 1 from public.badges);

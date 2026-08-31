@@ -118,11 +118,13 @@
 </section>
 
 <!-- Badges ----------------------------------------------------------------- -->
-<section class="section section--tint badges-section">
-	<div class="container">
-		<BadgeStrip />
-	</div>
-</section>
+{#if data.badges.length > 0}
+	<section class="section section--tint badges-section">
+		<div class="container">
+			<BadgeStrip badges={data.badges} />
+		</div>
+	</section>
+{/if}
 
 <CtaBand />
 

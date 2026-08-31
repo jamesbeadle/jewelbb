@@ -13,6 +13,14 @@ export interface TeamMemberRow {
 	sort_order: number;
 }
 
+export interface BadgeRow {
+	id: string;
+	label: string;
+	image_url: string;
+	visible: boolean;
+	sort_order: number;
+}
+
 export interface ProjectRow {
 	id: string;
 	slug: string;

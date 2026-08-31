@@ -34,6 +34,14 @@
 			icon: 'M12 12a4 4 0 1 0-4-4 4 4 0 0 0 4 4zm0 2c-4 0-8 2-8 5v2h16v-2c0-3-4-5-8-5z'
 		},
 		{
+			href: '/admin/badges',
+			title: 'Badges',
+			count: data.badgeCount,
+			unit: 'accreditation badges',
+			blurb: 'The logo strip on the homepage — add, hide or remove',
+			icon: 'M12 2l2.5 5.1 5.5.8-4 3.9.9 5.5-4.9-2.6-4.9 2.6.9-5.5-4-3.9 5.5-.8L12 2z'
+		},
+		{
 			href: '/admin/brochure',
 			title: 'Brochures',
 			count: data.sectionCount,

@@ -1,9 +1,16 @@
 <script lang="ts">
 	import { badgeList } from '$lib/data/images';
+
+	interface Badge {
+		src: string;
+		alt: string;
+	}
+
+	let { badges = badgeList as readonly Badge[] }: { badges?: readonly Badge[] } = $props();
 </script>
 
 <div class="badges" aria-label="Accreditations and partnerships">
-	{#each badgeList as badge (badge.src)}
+	{#each badges as badge (badge.src)}
 		<img src={badge.src} alt={badge.alt} loading="lazy" />
 	{/each}
 </div>

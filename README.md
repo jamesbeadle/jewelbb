@@ -52,6 +52,7 @@ Commit and push — the post appears at `/post/my-new-post` and in the sitemap a
 The site has a lightweight CMS at **`/admin`** (discrete link in the footer):
 
 - **Staff** — add/edit/reorder/delete team members shown on `/about`, including photo uploads.
+- **Badges** — the accreditation/partnership logo strip on the homepage (Considerate Constructors, SafeContractor, etc.). Add, hide, reorder, replace or delete badges; hiding keeps the badge on file so it can be brought back later. Requires the `badges` table — on an existing database run the additive migration `supabase/2026-08-31-badges.sql` once (fresh setups get it from `schema.sql`).
 - **Brochures** — a full brochure builder. Compose print-quality brochures page by page from designed templates (cover, philosophy, team, services, three-page project spreads, process, testimonials, back cover), keep them in draft, and make one **active** — that's what visitors see at `/brochure` and download as a PDF. PDFs are rendered server-side with headless Chromium, so the output is identical to the designed A4 pages every time (no browser print dialogs involved). Photos upload straight to Supabase Storage at full resolution via signed URLs. Requires running `supabase/2026-08-19-brochures.sql` once (see below).
 
 Content lives in Supabase; uploaded images go to a public `media` storage bucket.
