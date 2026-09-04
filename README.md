@@ -59,13 +59,32 @@ Content lives in Supabase; uploaded images go to a public `media` storage bucket
 
 **Setup (once):**
 
-1. In the Supabase dashboard open **SQL Editor**, paste the contents of `supabase/schema.sql`, and Run. This creates the tables, locks them down with RLS, creates the storage bucket, and seeds the current team + a starter brochure. Then run `supabase/2026-08-19-brochures.sql` the same way — it adds the `brochures` / `brochure_pages` tables used by the brochure builder.
+1. In the Supabase dashboard open **SQL Editor**, paste the contents of `supabase/schema.sql`, and Run. This creates the tables, locks them down with RLS, creates the storage bucket, and seeds the current team + a starter brochure. Then run `supabase/2026-08-19-brochures.sql` the same way — it adds the `brochures` / `brochure_pages` tables used by the brochure builder. (Existing database? Don't re-run `schema.sql` — see *Database migrations* below.)
 2. In **Project Settings → API**, copy the **Project URL** and the **service_role** key into the `SUPABASE_URL` / `SUPABASE_SERVICE_ROLE_KEY` env vars (locally in `.env`, and on Vercel).
 3. Set `ADMIN_USERNAME` / `ADMIN_PASSWORD` (and ideally `ADMIN_SESSION_SECRET`) env vars for the admin login.
 
 If Supabase isn't configured the public site still works — `/about` falls back to the static team data in `src/lib/data/team.ts` and `/brochure` renders a basic fallback.
 
 The service_role key bypasses row-level security — it must only ever live in env vars (never commit it; `.env` is gitignored).
+
+### Database migrations
+
+`schema.sql` is for a **fresh** database. On the live database, apply changes with the dated, standalone files in `supabase/` instead — each is additive, idempotent and safe to re-run:
+
+| File | Adds |
+| --- | --- |
+| `2026-08-12-enquiries.sql` | `enquiries` table (quote form inbox) |
+| `2026-08-19-brochures.sql` | `brochures` + `brochure_pages` (brochure builder) |
+| `2026-08-31-badges.sql` | `badges` table + seed |
+| `2026-09-04-security-hardening.sql` | RLS on every table, public API roles revoked, `admin_login_attempts` table (see Security) |
+
+## Security
+
+**Database.** Every table has row-level security enabled with **no policies**. The site's server code authenticates with the `service_role` key, which bypasses RLS; the public `anon`/`authenticated` keys are never used and see nothing. As a second layer, `2026-09-04-security-hardening.sql` also revokes the table privileges Supabase grants those public roles by default (and stops future tables getting them), so even if RLS were switched off by mistake the public keys still couldn't read or write anything. The script ends with a report — every table should show `rls_enabled = true`, `policies = 0`, `anon_access = false`, `service_role_access = true`. If a table is ever meant to be read with the anon key, it needs both a policy *and* an explicit `grant select on public.<table> to anon`.
+
+**Admin area (`/admin`).** Guarded in `src/hooks.server.ts` for every request whose path starts with `/admin` (except the login page): the `jb_admin` cookie must carry a valid, unexpired HMAC-SHA256 signature. The cookie is `HttpOnly`, `Secure`, `SameSite=Lax` and lasts 8 hours; SvelteKit's built-in origin check protects the login/logout forms from CSRF. Credentials and signatures are compared in constant time. The login is rate-limited — after **5 failed attempts from one IP within 15 minutes** further attempts are refused until the window passes (attempts are logged in `admin_login_attempts`, so the limit survives redeploys; a wrong password also costs a one-second delay). Every `/admin` response is sent with `Cache-Control: no-store`, `X-Frame-Options: DENY`, `X-Content-Type-Options: nosniff`, `Referrer-Policy: same-origin` and `X-Robots-Tag: noindex`. Failed and refused logins appear in the Vercel function logs as `Admin login failed for <ip>` / `Admin login refused for <ip>`.
+
+To sign every admin out at once (e.g. after a shared laptop goes missing), change `ADMIN_SESSION_SECRET` in Vercel and redeploy.
 
 ## Deploying to Vercel (first time)
 

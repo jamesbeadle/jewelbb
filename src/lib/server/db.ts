@@ -192,6 +192,19 @@ export async function dbDelete(table: string, id: string): Promise<void> {
 }
 
 /**
+ * Delete every row matching a PostgREST filter query (e.g. `status=eq.archived`).
+ * The filter is mandatory — an empty one would delete the whole table.
+ */
+export async function dbDeleteWhere(table: string, query: string): Promise<void> {
+	if (!query.trim()) throw new Error(`dbDeleteWhere(${table}): refusing to delete without a filter`);
+	const res = await fetch(restUrl(`${table}?${query}`), {
+		method: 'DELETE',
+		headers: headers()
+	});
+	await check(res, `delete ${table}`);
+}
+
+/**
  * Create a short-lived signed upload URL for the public 'media' bucket so the
  * browser can upload straight to Supabase Storage. This sidesteps Vercel's
  * ~4.5 MB request-body cap, so full-resolution photos survive intact.

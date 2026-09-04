@@ -30,6 +30,21 @@ async function hmac(payload: string, secret: string): Promise<string> {
 	return b64url(sig);
 }
 
+/**
+ * Constant-time string comparison. A plain `===` stops at the first
+ * differing character, so response times leak how much of a guess was
+ * right; this always examines every byte. Callers compare fixed-length
+ * digests, so the length check leaks nothing useful either.
+ */
+function safeEqual(a: string, b: string): boolean {
+	const x = enc.encode(a);
+	const y = enc.encode(b);
+	let diff = x.length ^ y.length;
+	const n = Math.max(x.length, y.length);
+	for (let i = 0; i < n; i++) diff |= (x[i] ?? 0) ^ (y[i] ?? 0);
+	return diff === 0;
+}
+
 // Env values are trimmed to survive stray whitespace/newlines from
 // copy-pasting into dashboard fields.
 function envTrim(v: string | undefined): string {
@@ -46,11 +61,24 @@ export function credentialsConfigured(): boolean {
 	return Boolean(envTrim(env.ADMIN_USERNAME) && envTrim(env.ADMIN_PASSWORD));
 }
 
-export function checkCredentials(username: string, password: string): boolean {
+/**
+ * Compares a login attempt against the configured credentials without
+ * leaking anything through timing: both values are hashed to a fixed
+ * length first, then compared byte-for-byte, and the username and
+ * password are always both checked (no early return on a bad username).
+ */
+export async function checkCredentials(username: string, password: string): Promise<boolean> {
 	if (!credentialsConfigured()) return false;
-	return (
-		username.trim() === envTrim(env.ADMIN_USERNAME) && password === envTrim(env.ADMIN_PASSWORD)
-	);
+	const key = secret();
+	const [givenUser, wantUser, givenPass, wantPass] = await Promise.all([
+		hmac(username.trim(), key),
+		hmac(envTrim(env.ADMIN_USERNAME), key),
+		hmac(password, key),
+		hmac(envTrim(env.ADMIN_PASSWORD), key)
+	]);
+	const userOk = safeEqual(givenUser, wantUser);
+	const passOk = safeEqual(givenPass, wantPass);
+	return userOk && passOk;
 }
 
 export async function createSessionToken(): Promise<string> {
@@ -62,8 +90,8 @@ export async function verifySessionToken(token: string | undefined): Promise<boo
 	if (!token || !secret()) return false;
 	const [payload, sig] = token.split('.');
 	if (!payload || !sig) return false;
-	if (Number(payload) < Date.now()) return false;
-	return (await hmac(payload, secret())) === sig;
+	if (!/^\d+$/.test(payload) || Number(payload) < Date.now()) return false;
+	return safeEqual(await hmac(payload, secret()), sig);
 }
 
 /* ---- Print tokens ---------------------------------------------------
@@ -86,8 +114,8 @@ export async function verifyPrintToken(
 	if (!token || !secret()) return false;
 	const [expires, sig] = token.split('.');
 	if (!expires || !sig) return false;
-	if (Number(expires) < Date.now()) return false;
-	return (await hmac(`print.${brochureId}.${expires}`, secret())) === sig;
+	if (!/^\d+$/.test(expires) || Number(expires) < Date.now()) return false;
+	return safeEqual(await hmac(`print.${brochureId}.${expires}`, secret()), sig);
 }
 
 export function setSessionCookie(cookies: Cookies, token: string): void {
