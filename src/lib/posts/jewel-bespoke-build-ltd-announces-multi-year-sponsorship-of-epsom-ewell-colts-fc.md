@@ -18,6 +18,6 @@ At *Jewel Bespoke Build Ltd*, we see our work as more than just *bespoke constru
 
 ## Investing in Community Futures
 
-From *bespoke builders* to active community members, our role goes beyond construction. We want to ensure that young people in Surrey have access to activities that instill values like teamwork and perseverance. This sponsorship with *Epsom & Ewell Colts FC* reinforces our mission to be *bespoke contractors* with a heart for local impact. Our support also aims to attract more players and coaches to join this exceptional club, enriching Surrey's football landscape.
+From *bespoke builders* to active community members, our role goes beyond construction. We want to ensure that young people in Surrey have access to activities that instil values like teamwork and perseverance. This sponsorship with *Epsom & Ewell Colts FC* reinforces our mission to be *bespoke contractors* with a heart for local impact. Our support also aims to attract more players and coaches to join this exceptional club, enriching Surrey's football landscape.
 
 At *Jewel Bespoke Build Ltd*, we're excited for the journey ahead with Epsom & Ewell Colts FC and look forward to watching the players and club thrive!

@@ -3,13 +3,18 @@
 </script>
 
 <Seo
-	title="Terms &amp; Conditions | Jewel Bespoke Build"
-	description="Works Order terms and conditions for Jewel Bespoke Build Ltd."
+	title="Subcontractor Terms | Jewel Bespoke Build"
+	description="Works Order terms on which Jewel Bespoke Build Ltd engages subcontractors and suppliers."
 />
 
 <section class="section">
 	<div class="container prose">
-		<h1>Terms &amp; Conditions: Jewel Bespoke Build Ltd</h1>
+		<h1>Subcontractor Terms: Jewel Bespoke Build Ltd</h1>
+		<p class="note">
+			These are the terms on which we engage subcontractors and suppliers. They are not the terms
+			of a building contract with a homeowner — if you are a client, your contract with us sets out
+			the terms that apply to your project.
+		</p>
 		<p>
 			The Works Order constitutes a contract between Jewel Bespoke Build Ltd and the Sub-Contractor
 			for the supply of the goods and/or services listed in the Order, pursuant to these Order
@@ -447,3 +452,12 @@
 		</p>
 	</div>
 </section>
+
+<style>
+	.note {
+		background: var(--tint);
+		border: 1px solid var(--line);
+		border-radius: var(--radius);
+		padding: 0.9rem 1.1rem;
+	}
+</style>

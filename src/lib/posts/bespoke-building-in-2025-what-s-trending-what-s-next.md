@@ -14,7 +14,7 @@ As we settle into February 2025, the year is already shaping up to be an excitin
 
 **Seamless Indoor / Outdoor Living:** Expansive bi-fold doors, modern garden rooms, and integrated outdoor entertainment spaces are becoming must-haves.
 
-**Smart Homes & Automation:** From app-controlled heating and lighting to advanced security features, home automation is taking center stage.
+**Smart Homes & Automation:** From app-controlled heating and lighting to advanced security features, home automation is taking centre stage.
 
 **Timeless Interiors with a Modern Edge:** The combination of natural materials, bold feature elements, and sophisticated lighting is making homes both elegant and functional.
 

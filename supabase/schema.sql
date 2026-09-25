@@ -71,6 +71,22 @@ create table if not exists public.page_content (
 
 alter table public.page_content enable row level security;
 
+-- Homepage hero slideshow (/admin → Slideshow)
+create table if not exists public.home_slides (
+	id uuid primary key default gen_random_uuid(),
+	image_url text not null default '',
+	alt text not null default '',
+	visible boolean not null default true,
+	sort_order int not null default 100,
+	created_at timestamptz not null default now()
+);
+
+alter table public.home_slides enable row level security;
+
+insert into public.home_slides (image_url, alt, visible, sort_order)
+select '/images/site/home-hero.jpg', 'Recently completed Jewel Bespoke Build project', true, 10
+where not exists (select 1 from public.home_slides);
+
 -- ---------- Seed: current projects (only if table is empty) -------
 
 insert into public.projects (slug, name, meta_title, meta_description, subtitle, description, gallery, cross_link, accessible, sort_order)

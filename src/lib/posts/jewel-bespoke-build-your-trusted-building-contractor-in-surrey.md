@@ -30,7 +30,7 @@ Our services cover a wide range of areas in Surrey, including Guildford, Woking,
 
 ## Looking for a Trusted Building Contractor in Surrey?
 
-When it comes to choosing building contractors in Surrey, Jewel Bespoke Build is the ideal partner for your bespoke build or home improvement project. With a reputation for excellence and attention to detail, we offer a truly personalized service for every client.
+When it comes to choosing building contractors in Surrey, Jewel Bespoke Build is the ideal partner for your bespoke build or home improvement project. With a reputation for excellence and attention to detail, we offer a truly personalised service for every client.
 
 **Get in Touch with Jewel Bespoke Build**
 

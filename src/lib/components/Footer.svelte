@@ -62,8 +62,7 @@
 			<p>© {year} Jewel Bespoke Build Ltd. All rights reserved.</p>
 			<ul>
 				<li><a href="/privacy-policy">Privacy policy</a></li>
-				<li><a href="/terms-and-conditions">Terms &amp; conditions</a></li>
-				<li><a class="footer__admin" href="/admin">Admin</a></li>
+				<li><a href="/subcontractor-terms">Subcontractor terms</a></li>
 			</ul>
 		</div>
 	</div>
@@ -162,11 +161,6 @@
 
 	.footer__legal a {
 		color: var(--ink-600);
-	}
-
-	.footer__admin {
-		opacity: 0.55;
-		font-size: 0.82rem;
 	}
 
 </style>
