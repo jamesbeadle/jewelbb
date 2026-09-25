@@ -32,7 +32,15 @@ export interface ProjectRow {
 	gallery: string[];
 	cross_link: string;
 	accessible: boolean;
+	/** Missing until 2026-09-25-page-content.sql has been run — treat as visible. */
+	visible?: boolean;
 	sort_order: number;
+}
+
+export interface PageContentRow {
+	page: string;
+	content: Record<string, string>;
+	updated_at: string;
 }
 
 export interface RtwSubmissionRow {
@@ -181,6 +189,23 @@ export async function dbUpdateWhere(
 		body: JSON.stringify(patch)
 	});
 	await check(res, `update ${table}`);
+}
+
+/** Insert or replace a row, matching on the given unique column(s). */
+export async function dbUpsert(
+	table: string,
+	row: Record<string, unknown>,
+	onConflict: string
+): Promise<void> {
+	const res = await fetch(restUrl(`${table}?on_conflict=${encodeURIComponent(onConflict)}`), {
+		method: 'POST',
+		headers: headers({
+			'Content-Type': 'application/json',
+			Prefer: 'resolution=merge-duplicates,return=minimal'
+		}),
+		body: JSON.stringify(row)
+	});
+	await check(res, `upsert ${table}`);
 }
 
 export async function dbDelete(table: string, id: string): Promise<void> {

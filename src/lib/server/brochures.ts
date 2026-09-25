@@ -179,7 +179,7 @@ export async function addPage(
 export async function addProjectPages(brochureId: string, projectSlug?: string): Promise<void> {
 	let project: Project | undefined;
 	if (projectSlug) {
-		project = (await getProjects()).find((p) => p.slug === projectSlug);
+		project = (await getProjects({ includeHidden: true })).find((p) => p.slug === projectSlug);
 	}
 	const name = project ? `The ${project.name} Residence` : '';
 	const gallery = project?.gallery ?? [];
@@ -274,7 +274,7 @@ export interface MediaGroup {
 
 /** Every image the site already ships with, grouped for the picker. */
 export async function siteImageLibrary(): Promise<MediaGroup[]> {
-	const projects = await getProjects();
+	const projects = await getProjects({ includeHidden: true });
 	const groups: MediaGroup[] = projects.map((p) => ({
 		label: `Project — ${p.name}`,
 		images: p.gallery

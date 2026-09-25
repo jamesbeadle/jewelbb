@@ -13,9 +13,18 @@
 <nav class="crumbs"><a href="/admin/projects">← All projects</a></nav>
 <h1>Edit project</h1>
 
+{#if project.visible === false}
+	<p class="note" role="status">
+		This project is <strong>hidden</strong> — it’s not on the website and its page is offline.
+		Tick “Show on the website” below to bring it back.
+	</p>
+{/if}
 {#if form?.saved}
 	<p class="ok" role="status">
-		Saved. <a href="/{project.slug}" target="_blank" rel="noopener">View the project page ↗</a>
+		Saved.
+		{#if project.visible !== false}
+			<a href="/{project.slug}" target="_blank" rel="noopener">View the project page ↗</a>
+		{/if}
 	</p>
 {/if}
 {#if form?.error}
@@ -65,10 +74,19 @@
 			Sort order <span>(lower = shown first)</span>
 			<input name="sort_order" type="number" value={project.sort_order} />
 		</label>
-		<label class="editor__check">
-			<input type="checkbox" name="accessible" checked={project.accessible} />
-			Accessible living project
-		</label>
+		<div class="editor__checks">
+			<label class="editor__check">
+				<input type="checkbox" name="accessible" checked={project.accessible} />
+				Accessible living project
+			</label>
+			{#if 'visible' in project}
+				<input type="hidden" name="has_visible" value="1" />
+				<label class="editor__check">
+					<input type="checkbox" name="visible" checked={project.visible !== false} />
+					Show on the website
+				</label>
+			{/if}
+		</div>
 	</div>
 	<div>
 		<button class="btn btn--primary" type="submit">Save changes</button>
@@ -131,7 +149,7 @@
 	method="POST"
 	action="?/delete"
 	onsubmit={(e) => {
-		if (!confirm('Delete this project and its page? This cannot be undone.')) e.preventDefault();
+		if (!confirm('Delete this project and its page? This cannot be undone.\n\nTip: to take it off the website but keep it, untick “Show on the website” instead.')) e.preventDefault();
 	}}
 >
 	<button class="danger" type="submit">Delete this project</button>
@@ -223,12 +241,25 @@
 		max-width: 120px;
 	}
 
+	.editor__checks {
+		display: grid;
+		gap: 0.35rem;
+		padding-bottom: 0.65rem;
+	}
+
 	.editor__check {
 		grid-auto-flow: column;
 		align-items: center;
 		justify-content: start;
 		gap: 0.5rem;
-		padding-bottom: 0.65rem;
+	}
+
+	.note {
+		background: #fdf6ec;
+		border: 1px solid #f0dfc0;
+		border-radius: var(--radius);
+		padding: 0.7rem 1rem;
+		max-width: 56rem;
 	}
 
 	.editor__check input {

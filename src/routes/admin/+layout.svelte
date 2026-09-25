@@ -8,6 +8,7 @@
 	const links = [
 		{ label: 'Enquiries', href: '/admin/enquiries' },
 		{ label: 'Projects', href: '/admin/projects' },
+		{ label: 'Page text', href: '/admin/content' },
 		{ label: 'Staff', href: '/admin/staff' },
 		{ label: 'Badges', href: '/admin/badges' },
 		{ label: 'Brochures', href: '/admin/brochure' },

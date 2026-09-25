@@ -52,6 +52,8 @@ Commit and push — the post appears at `/post/my-new-post` and in the sitemap a
 The site has a lightweight CMS at **`/admin`** (discrete link in the footer):
 
 - **Staff** — add/edit/reorder/delete team members shown on `/about`, including photo uploads.
+- **Projects** — edit portfolio projects and galleries. Reorder with the ▲/▼ arrows on the list, and **Hide** a project to take it off the site (portfolio, homepage, sitemap and its own page) without deleting it — **Show** brings it back.
+- **Page text** — edit the headings, intros and SEO titles/descriptions of the homepage, About, Services (including each service's title and description), Portfolio, Our community, Contact, News and the call-to-action band. Only changed fields are stored; anything untouched keeps the built-in copy from `src/lib/content/pages.ts`, and each field or whole page can be restored to the original.
 - **Badges** — the accreditation/partnership logo strip on the homepage (Considerate Constructors, SafeContractor, etc.). Add, hide, reorder, replace or delete badges; hiding keeps the badge on file so it can be brought back later. Requires the `badges` table — on an existing database run the additive migration `supabase/2026-08-31-badges.sql` once (fresh setups get it from `schema.sql`).
 - **Brochures** — a full brochure builder. Compose print-quality brochures page by page from designed templates (cover, philosophy, team, services, three-page project spreads, process, testimonials, back cover), keep them in draft, and make one **active** — that's what visitors see at `/brochure` and download as a PDF. PDFs are rendered server-side with headless Chromium, so the output is identical to the designed A4 pages every time (no browser print dialogs involved). Photos upload straight to Supabase Storage at full resolution via signed URLs. Requires running `supabase/2026-08-19-brochures.sql` once (see below).
 
@@ -77,6 +79,7 @@ The service_role key bypasses row-level security — it must only ever live in e
 | `2026-08-19-brochures.sql` | `brochures` + `brochure_pages` (brochure builder) |
 | `2026-08-31-badges.sql` | `badges` table + seed |
 | `2026-09-04-security-hardening.sql` | RLS on every table, public API roles revoked, `admin_login_attempts` table (see Security) |
+| `2026-09-25-page-content.sql` | `page_content` table (Page text editor) + `projects.visible` (hide projects) |
 
 ## Security
 

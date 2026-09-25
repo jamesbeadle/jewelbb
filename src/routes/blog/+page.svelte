@@ -2,22 +2,22 @@
 	import Seo from '$lib/components/Seo.svelte';
 	import CtaBand from '$lib/components/CtaBand.svelte';
 	import { formatDate } from '$lib/blog';
+	import { pageText, paragraphs } from '$lib/content/pages';
 
 	let { data } = $props();
+
+	const t = $derived(pageText(data.content, 'blog'));
 </script>
 
-<Seo
-	title="News & Insights | Jewel Bespoke Build Ltd"
-	description="News, project stories and expert guidance from Jewel Bespoke Build — bespoke construction, renovations and community projects in Surrey."
-/>
+<Seo title={t.seo_title} description={t.seo_description} />
 
 <section class="section page-hero">
 	<div class="container">
-		<span class="kicker">News &amp; insights</span>
-		<h1>The Jewel journal</h1>
-		<p class="lede">
-			Project stories, company news and practical guidance from our team of Surrey builders.
-		</p>
+		<span class="kicker">{t.kicker}</span>
+		<h1>{t.title}</h1>
+		{#each paragraphs(t.intro) as p, i (i)}
+			<p class="lede">{p}</p>
+		{/each}
 	</div>
 </section>
 

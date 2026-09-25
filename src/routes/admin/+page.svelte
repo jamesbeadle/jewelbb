@@ -26,6 +26,14 @@
 			icon: 'M3 21V8l9-5 9 5v13h-6v-7h-6v7H3z'
 		},
 		{
+			href: '/admin/content',
+			title: 'Page text',
+			count: data.contentPageCount,
+			unit: 'editable pages',
+			blurb: 'Headings and copy on every page of the site',
+			icon: 'M4 4h16v3H4V4zm0 5h10v2H4V9zm0 4h16v2H4v-2zm0 4h10v2H4v-2z'
+		},
+		{
 			href: '/admin/staff',
 			title: 'Staff',
 			count: data.staffCount,

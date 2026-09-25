@@ -5,12 +5,14 @@
 	import CtaBand from '$lib/components/CtaBand.svelte';
 	import { site } from '$lib/data/site';
 	import { images } from '$lib/data/images';
-	import { services } from '$lib/data/services';
 	import { testimonials } from '$lib/data/testimonials';
+	import { pageText, servicesWithText } from '$lib/content/pages';
 
 	let { data } = $props();
 
 	const featured = $derived(data.featured);
+	const t = $derived(pageText(data.content, 'home'));
+	const services = $derived(servicesWithText(data.content));
 
 	const jsonLd = {
 		'@context': 'https://schema.org',
@@ -33,8 +35,8 @@
 </script>
 
 <Seo
-	title="Jewel Bespoke Build | Loft Conversions, Home Extensions & Renovations in Surrey"
-	description={site.description}
+	title={t.seo_title}
+	description={t.seo_description}
 	image={images.homeHero}
 	jsonLd={jsonLd}
 />
@@ -43,13 +45,9 @@
 <section class="hero">
 	<div class="container hero__grid">
 		<div class="hero__content">
-			<span class="kicker">Family-run · Surrey · 65+ years of experience</span>
-			<h1>Welcome to Jewel Bespoke Build</h1>
-			<p>
-				A family run construction company in Surrey, proudly serving clients across the South of
-				England — specialising in high quality loft conversions, tailored home extensions, and
-				comprehensive home renovations.
-			</p>
+			<span class="kicker">{t.hero_kicker}</span>
+			<h1>{t.hero_title}</h1>
+			<p>{t.hero_text}</p>
 			<div class="hero__actions">
 				<a href="/contact" class="btn btn--primary">Request a free quote</a>
 				<a href="/about" class="btn btn--outline">About us</a>
@@ -62,12 +60,9 @@
 <!-- Services -------------------------------------------------------------- -->
 <section class="section">
 	<div class="container">
-		<span class="kicker">What we do</span>
-		<h2>Our services</h2>
-		<p class="lede">
-			From new builds to loft conversions, every project is delivered with meticulous care,
-			craftsmanship, and attention to detail.
-		</p>
+		<span class="kicker">{t.services_kicker}</span>
+		<h2>{t.services_title}</h2>
+		<p class="lede">{t.services_text}</p>
 		<div class="grid grid--3 services-grid">
 			{#each services as service (service.slug)}
 				<a class="card service-card" href="/services#{service.slug}">
@@ -83,8 +78,8 @@
 <!-- Featured projects ------------------------------------------------------ -->
 <section class="section section--tint">
 	<div class="container">
-		<span class="kicker">Recent projects</span>
-		<h2>Built around the way you live</h2>
+		<span class="kicker">{t.projects_kicker}</span>
+		<h2>{t.projects_title}</h2>
 		<div class="grid grid--3 featured-grid">
 			{#each featured as project (project.slug)}
 				<a class="card featured" href="/{project.slug}">
@@ -106,12 +101,9 @@
 <section class="section">
 	<div class="container testimonial-wrap">
 		<div>
-			<span class="kicker">What clients say</span>
-			<h2>Trusted by homeowners and architects alike</h2>
-			<p class="lede">
-				We build long-term relationships through transparency, clear communication and quality
-				that speaks for itself.
-			</p>
+			<span class="kicker">{t.testimonial_kicker}</span>
+			<h2>{t.testimonial_title}</h2>
+			<p class="lede">{t.testimonial_text}</p>
 		</div>
 		<TestimonialCard testimonial={testimonials[0]} />
 	</div>

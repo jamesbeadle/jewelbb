@@ -1,24 +1,23 @@
 <script lang="ts">
 	import Seo from '$lib/components/Seo.svelte';
 	import CtaBand from '$lib/components/CtaBand.svelte';
-	import { services } from '$lib/data/services';
+	import { pageText, paragraphs, servicesWithText } from '$lib/content/pages';
+
+	let { data } = $props();
+
+	const t = $derived(pageText(data.content, 'services'));
+	const services = $derived(servicesWithText(data.content));
 </script>
 
-<Seo
-	title="Building & Bespoke Construction Services | Jewel Bespoke Build Ltd in Surrey"
-	description="New build homes, full house refurbishments, extensions, loft conversions, basement conversions and accessible living — bespoke construction services in Surrey."
-/>
+<Seo title={t.seo_title} description={t.seo_description} />
 
 <section class="section page-hero">
 	<div class="container">
-		<span class="kicker">What we do</span>
-		<h1>Our services</h1>
-		<p class="lede">
-			Discover the comprehensive services offered by Jewel Bespoke Build Ltd, your trusted bespoke
-			contractors in Surrey. Whether you're looking for modern living spaces, luxury finishes, or
-			innovative home improvements, we provide personalised solutions that enhance your living
-			experience.
-		</p>
+		<span class="kicker">{t.kicker}</span>
+		<h1>{t.title}</h1>
+		{#each paragraphs(t.intro) as p, i (i)}
+			<p class="lede">{p}</p>
+		{/each}
 	</div>
 </section>
 

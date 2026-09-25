@@ -1,4 +1,5 @@
 import { dbConfigured, dbCount, dbSelect, type EnquiryRow } from '$lib/server/db';
+import { contentPages } from '$lib/content/pages';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async () => {
@@ -61,6 +62,7 @@ export const load: PageServerLoad = async () => {
 		staffCount,
 		sectionCount,
 		projectCount,
+		contentPageCount: contentPages.length,
 		badgeCount,
 		rtwCount,
 		enquiryCount,
