@@ -1,8 +1,11 @@
 <script lang="ts">
 	import Seo from '$lib/components/Seo.svelte';
 	import CtaBand from '$lib/components/CtaBand.svelte';
+	import { pageText, paragraphs } from '$lib/content/pages';
 
 	let { data } = $props();
+
+	const t = $derived(pageText(data.content, 'portfolio'));
 
 	const live = $derived(data.projects.filter((p) => p.gallery.length > 0));
 
@@ -11,31 +14,25 @@
 	const shown = $derived(filter === 'all' ? live : live.filter((p) => p.accessible));
 </script>
 
-<Seo
-	title="Our Portfolio | Jewel Bespoke Build Ltd | Custom Builds & Home Renovations in Surrey"
-	description="Explore recently completed projects by Jewel Bespoke Build — loft conversions, home extensions, accessible living and full renovations across Surrey and the South of England."
-/>
+<Seo title={t.seo_title} description={t.seo_description} />
 
 <section class="section page-hero">
 	<div class="container">
-		<span class="kicker">Our work</span>
-		<h1>Our portfolio</h1>
-		<p class="lede">
-			Explore the portfolio of Jewel Bespoke Build Ltd, a trusted bespoke building company in
-			Surrey. Discover exceptional craftsmanship and innovative design in our recently completed
-			projects. Each build showcases the quality and care we bring to every project — turning your
-			vision into reality.
-		</p>
+		<span class="kicker">{t.kicker}</span>
+		<h1>{t.title}</h1>
+		{#each paragraphs(t.intro) as p, i (i)}
+			<p class="lede">{p}</p>
+		{/each}
 		<div class="filters" role="group" aria-label="Filter projects">
 			<button
 				class="filters__btn"
 				class:filters__btn--active={filter === 'all'}
-				onclick={() => (filter = 'all')}>All projects</button
+				onclick={() => (filter = 'all')}>{t.filter_all}</button
 			>
 			<button
 				class="filters__btn"
 				class:filters__btn--active={filter === 'accessible'}
-				onclick={() => (filter = 'accessible')}>Accessible living</button
+				onclick={() => (filter = 'accessible')}>{t.filter_accessible}</button
 			>
 		</div>
 	</div>

@@ -4,33 +4,31 @@
 	import CtaBand from '$lib/components/CtaBand.svelte';
 	import { site } from '$lib/data/site';
 	import { images } from '$lib/data/images';
+	import { lines, pageText, paragraphs } from '$lib/content/pages';
 
 	let { data } = $props();
 
 	const team = $derived(data.team);
+	const t = $derived(pageText(data.content, 'about'));
+	// "Bold part — rest of the sentence", one per line
+	const points = $derived(
+		lines(t.approach_points).map((l) => {
+			const i = l.indexOf(' — ');
+			return i === -1 ? { bold: '', rest: l } : { bold: l.slice(0, i), rest: l.slice(i) };
+		})
+	);
 </script>
 
-<Seo
-	title="About Jewel Bespoke Build Ltd | House Renovations, Loft Conversions & Home Extensions"
-	description="Founded by Surrey natives Les and Nigel Reilly, Jewel Bespoke Build is a family-run construction company with over 65 years of experience serving the South of England."
-/>
+<Seo title={t.seo_title} description={t.seo_description} />
 
 <section class="section page-hero">
 	<div class="container about-hero">
 		<div>
-			<span class="kicker">Our story</span>
-			<h1>About Jewel Bespoke Build Ltd</h1>
-			<p class="lede">
-				Welcome to Jewel Bespoke Build Ltd, a family-run construction company in Surrey with over
-				65 years of experience, proudly serving the South of England. Founded by Surrey natives
-				Les and Nigel Reilly, we are a trusted bespoke building company specialising in luxury,
-				custom homes that reflect your unique taste and lifestyle.
-			</p>
-			<p class="lede">
-				As experts in home renovations, home extensions, and loft conversions in Surrey, our
-				dedicated team — including in-house Project Managers and personal Site Managers —
-				delivers every project with meticulous care, craftsmanship, and attention to detail.
-			</p>
+			<span class="kicker">{t.kicker}</span>
+			<h1>{t.title}</h1>
+			{#each paragraphs(t.intro) as p, i (i)}
+				<p class="lede">{p}</p>
+			{/each}
 		</div>
 		<img class="about-hero__img" src={images.aboutTeam} alt="The Jewel Bespoke Build team" />
 	</div>
@@ -38,14 +36,9 @@
 
 <section class="section section--tint">
 	<div class="container">
-		<span class="kicker">The people behind the projects</span>
-		<h2>Our team</h2>
-		<p class="lede">
-			We are more than just a group of professionals — we are a family-run bespoke building company
-			united by a shared passion for craftsmanship, innovation, and client satisfaction. We see
-			every project as an opportunity to create something truly unique, tailored to the specific
-			vision and lifestyle of our clients.
-		</p>
+		<span class="kicker">{t.team_kicker}</span>
+		<h2>{t.team_title}</h2>
+		<p class="lede">{t.team_text}</p>
 		<div class="grid grid--3 team-grid">
 			{#each team as member, i (member.name + i)}
 				<article class="card team-card">
@@ -66,31 +59,23 @@
 <section class="section">
 	<div class="container approach">
 		<div>
-			<span class="kicker">How we work</span>
-			<h2>Our approach</h2>
-			<p>
-				At Jewel Bespoke Build Ltd, a leading construction company in Surrey, we deliver
-				exceptional quality across all projects — from loft conversions and home extensions to
-				full home renovations. Using advanced project management software and clear weekly
-				updates, our experienced project and site managers ensure transparency, precision, and
-				top-tier craftsmanship.
-			</p>
-			<p>
-				As a trusted bespoke building company, we expertly manage budgets, timelines, and
-				challenges to deliver on time and within budget. Contact us today to work with dedicated
-				bespoke contractors in Surrey committed to bringing your vision to life.
-			</p>
+			<span class="kicker">{t.approach_kicker}</span>
+			<h2>{t.approach_title}</h2>
+			{#each paragraphs(t.approach_text) as p, i (i)}
+				<p>{p}</p>
+			{/each}
 			<div class="approach__actions">
 				<a href="/contact" class="btn btn--primary">Contact us today</a>
 				<a href={site.brochureUrl} class="btn btn--outline">View our brochure</a>
 			</div>
 		</div>
-		<ul class="card approach__points">
-			<li><strong>Weekly updates</strong> — clear communication through every stage of the build.</li>
-			<li><strong>In-house project managers</strong> — one accountable team from start to finish.</li>
-			<li><strong>Transparent budgets</strong> — helpful cost information throughout the process.</li>
-			<li><strong>Health &amp; safety first</strong> — standards consistently maintained on every site.</li>
-		</ul>
+		{#if points.length}
+			<ul class="card approach__points">
+				{#each points as pt, i (i)}
+					<li>{#if pt.bold}<strong>{pt.bold}</strong>{/if}{pt.rest}</li>
+				{/each}
+			</ul>
+		{/if}
 	</div>
 </section>
 

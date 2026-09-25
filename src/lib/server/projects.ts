@@ -20,11 +20,22 @@ export function rowToProject(r: ProjectRow): Project {
 	};
 }
 
-export async function getProjects(): Promise<Project[]> {
+/** Order used everywhere projects are listed (name breaks sort_order ties). */
+export const PROJECT_ORDER = 'order=sort_order.asc,name.asc';
+
+/**
+ * Projects for the public site — hidden projects are left out (no page, not
+ * in the portfolio or sitemap). Pass `includeHidden` for admin tools.
+ */
+export async function getProjects(
+	{ includeHidden = false }: { includeHidden?: boolean } = {}
+): Promise<Project[]> {
 	if (dbConfigured()) {
 		try {
-			const rows = await dbSelect<ProjectRow>('projects', 'select=*&order=sort_order.asc');
-			if (rows.length > 0) return rows.map(rowToProject);
+			const rows = await dbSelect<ProjectRow>('projects', `select=*&${PROJECT_ORDER}`);
+			if (rows.length > 0) {
+				return rows.filter((r) => includeHidden || r.visible !== false).map(rowToProject);
+			}
 		} catch {
 			// fall through to the static fallback
 		}

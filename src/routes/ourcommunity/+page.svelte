@@ -2,22 +2,22 @@
 	import Seo from '$lib/components/Seo.svelte';
 	import CtaBand from '$lib/components/CtaBand.svelte';
 	import { images } from '$lib/data/images';
+	import { pageText, paragraphs } from '$lib/content/pages';
+
+	let { data } = $props();
+
+	const t = $derived(pageText(data.content, 'ourcommunity'));
 </script>
 
-<Seo
-	title="Our Commitment to Community | Jewel Bespoke Build Ltd | Builders in Surrey"
-	description="From sponsoring Epsom & Ewell Colts FC to planting 100 trees per project with Ecologi, Jewel Bespoke Build is committed to making a difference locally and globally."
-/>
+<Seo title={t.seo_title} description={t.seo_description} />
 
 <section class="section page-hero">
 	<div class="container">
-		<span class="kicker">Beyond the build</span>
-		<h1>Our commitment to community</h1>
-		<p class="lede">
-			As bespoke builders based in Epsom and Ewell, Jewel Bespoke Build Ltd is dedicated to making
-			a difference locally and globally. From sustainable practices to community initiatives, we
-			work to foster connections, create opportunities, and drive meaningful change.
-		</p>
+		<span class="kicker">{t.kicker}</span>
+		<h1>{t.title}</h1>
+		{#each paragraphs(t.intro) as p, i (i)}
+			<p class="lede">{p}</p>
+		{/each}
 	</div>
 </section>
 
@@ -25,27 +25,18 @@
 	<div class="container grid grid--3 commitments">
 		<article class="card commitment">
 			<img src={images.badges.eeColts} alt="Epsom & Ewell Colts FC" class="commitment__img" loading="lazy" />
-			<h2>Sponsorship of EEFC</h2>
-			<p>
-				Jewel Bespoke Build Ltd is honoured to sponsor Epsom &amp; Ewell Colts FC, a cornerstone
-				of our community with over 1,100 players across 80 teams.
-			</p>
+			<h2>{t.card1_title}</h2>
+			<p>{t.card1_text}</p>
 		</article>
 		<article class="card commitment">
 			<span class="commitment__emoji" aria-hidden="true">🤝</span>
-			<h2>Charitable causes</h2>
-			<p>
-				We believe in giving back to our community. Alongside our commitment to sustainability, we
-				proudly support various charitable initiatives that make a meaningful difference.
-			</p>
+			<h2>{t.card2_title}</h2>
+			<p>{t.card2_text}</p>
 		</article>
 		<article class="card commitment">
 			<span class="commitment__emoji" aria-hidden="true">🌱</span>
-			<h2>Ecologi</h2>
-			<p>
-				We are committed to sustainability, partnering with Ecologi to plant 100 trees for every
-				project — helping to offset our carbon footprint.
-			</p>
+			<h2>{t.card3_title}</h2>
+			<p>{t.card3_text}</p>
 		</article>
 	</div>
 </section>

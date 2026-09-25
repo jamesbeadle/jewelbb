@@ -6,6 +6,7 @@ import {
 	storageUpload,
 	type ProjectRow
 } from '$lib/server/db';
+import { PROJECT_ORDER } from '$lib/server/projects';
 import type { Actions, PageServerLoad } from './$types';
 
 /** Top-level routes that a project slug must not shadow. */
@@ -35,7 +36,7 @@ export const load: PageServerLoad = async ({ params }) => {
 	const project = await getProject(params.id);
 	const others = await dbSelect<Pick<ProjectRow, 'slug' | 'name'>>(
 		'projects',
-		'select=slug,name&order=sort_order.asc'
+		`select=slug,name&${PROJECT_ORDER}`
 	);
 	return { project, others: others.filter((o) => o.slug !== project.slug) };
 };
@@ -64,6 +65,8 @@ export const actions: Actions = {
 			accessible: form.get('accessible') === 'on',
 			sort_order: Number(form.get('sort_order') ?? 100) || 100
 		};
+		// Only sent once the `visible` column exists (2026-09-25-page-content.sql).
+		if (form.has('has_visible')) patch.visible = form.get('visible') === 'on';
 
 		try {
 			await dbUpdate('projects', params.id, patch);

@@ -4,6 +4,11 @@
 	import TestimonialCard from '$lib/components/TestimonialCard.svelte';
 	import { site } from '$lib/data/site';
 	import { testimonials } from '$lib/data/testimonials';
+	import { pageText, paragraphs } from '$lib/content/pages';
+
+	let { data } = $props();
+
+	const t = $derived(pageText(data.content, 'contact'));
 
 	const jsonLd = {
 		'@context': 'https://schema.org',
@@ -24,32 +29,31 @@
 </script>
 
 <Seo
-	title="Contact Jewel Bespoke Build Ltd | Building Contractors & Bespoke Builders in Surrey"
-	description="Request a free quote from Jewel Bespoke Build — bespoke construction, extensions, loft conversions and renovations in Surrey. Call 0208 109 1015 or send us a message."
+	title={t.seo_title}
+	description={t.seo_description}
 	jsonLd={jsonLd}
 />
 
 <section class="section page-hero">
 	<div class="container">
-		<span class="kicker">Let's talk about your project</span>
-		<h1>Contact Jewel Bespoke Build Ltd</h1>
-		<p class="lede">
-			Whether you're interested in a custom home extension, full refurbishment, or unique home
-			design, our team is ready to help.
-		</p>
+		<span class="kicker">{t.kicker}</span>
+		<h1>{t.title}</h1>
+		{#each paragraphs(t.intro) as p, i (i)}
+			<p class="lede">{p}</p>
+		{/each}
 	</div>
 </section>
 
 <section class="section section--tint">
 	<div class="container contact-grid">
 		<div class="card contact-form-card">
-			<h2>Request a free quote</h2>
+			<h2>{t.form_title}</h2>
 			<ContactForm />
 		</div>
 
 		<aside class="contact-aside">
 			<div class="card contact-details">
-				<h2>Contact details</h2>
+				<h2>{t.details_title}</h2>
 				<ul>
 					<li>
 						<span class="contact-details__label">Call us</span>

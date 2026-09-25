@@ -1,13 +1,18 @@
 <script lang="ts">
+	import { page } from '$app/state';
+	import { pageText, type ContentOverrides } from '$lib/content/pages';
+
 	interface Props {
 		title?: string;
 		text?: string;
 	}
 
-	let {
-		title = 'Build your ideal home that matches your vision and lifestyle.',
-		text = 'Let us turn your dream into a reality. Tell us about your project and we will be in touch.'
-	}: Props = $props();
+	let props: Props = $props();
+
+	// Defaults come from /admin → Page text → Call-to-action band.
+	const shared = $derived(pageText(page.data.content as ContentOverrides | undefined, 'shared'));
+	const title = $derived(props.title ?? shared.cta_title);
+	const text = $derived(props.text ?? shared.cta_text);
 </script>
 
 <section class="section cta">

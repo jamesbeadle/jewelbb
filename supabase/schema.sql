@@ -55,11 +55,21 @@ create table if not exists public.projects (
 	gallery jsonb not null default '[]'::jsonb,
 	cross_link text not null default '',
 	accessible boolean not null default false,
+	visible boolean not null default true,
 	sort_order int not null default 100,
 	created_at timestamptz not null default now()
 );
 
 alter table public.projects enable row level security;
+
+-- Text edited in /admin → Page text (only fields that differ from the defaults)
+create table if not exists public.page_content (
+	page text primary key,
+	content jsonb not null default '{}'::jsonb,
+	updated_at timestamptz not null default now()
+);
+
+alter table public.page_content enable row level security;
 
 -- ---------- Seed: current projects (only if table is empty) -------
 
