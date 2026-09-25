@@ -16,7 +16,7 @@ const staticPaths = [
 	'/brochure',
 	'/contact',
 	'/privacy-policy',
-	'/terms-and-conditions'
+	'/subcontractor-terms'
 ];
 
 export const GET: RequestHandler = async () => {

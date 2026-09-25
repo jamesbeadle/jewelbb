@@ -3,6 +3,7 @@
 	import BadgeStrip from '$lib/components/BadgeStrip.svelte';
 	import TestimonialCard from '$lib/components/TestimonialCard.svelte';
 	import CtaBand from '$lib/components/CtaBand.svelte';
+	import HeroSlideshow from '$lib/components/HeroSlideshow.svelte';
 	import { site } from '$lib/data/site';
 	import { images } from '$lib/data/images';
 	import { testimonials } from '$lib/data/testimonials';
@@ -53,7 +54,7 @@
 				<a href="/about" class="btn btn--outline">About us</a>
 			</div>
 		</div>
-		<img class="hero__img" src={images.homeHero} alt="Recently completed Jewel Bespoke Build project" />
+		<HeroSlideshow slides={data.slides} />
 	</div>
 </section>
 
@@ -143,14 +144,6 @@
 		font-size: 1.15rem;
 		color: var(--ink-600);
 		margin-bottom: 1.8rem;
-	}
-
-	.hero__img {
-		width: 100%;
-		aspect-ratio: 4 / 3;
-		object-fit: cover;
-		border-radius: var(--radius-lg);
-		box-shadow: var(--shadow-lift);
 	}
 
 	.hero__actions {

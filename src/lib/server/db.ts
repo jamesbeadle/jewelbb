@@ -37,6 +37,14 @@ export interface ProjectRow {
 	sort_order: number;
 }
 
+export interface HomeSlideRow {
+	id: string;
+	image_url: string;
+	alt: string;
+	visible: boolean;
+	sort_order: number;
+}
+
 export interface PageContentRow {
 	page: string;
 	content: Record<string, string>;

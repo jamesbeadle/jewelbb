@@ -8,6 +8,7 @@ export const load: PageServerLoad = async () => {
 	let projectCount: number | null = null;
 	let badgeCount: number | null = null;
 	let rtwCount: number | null = null;
+	let slideCount: number | null = null;
 	let enquiryCount: number | null = null;
 	let newEnquiryCount = 0;
 	let recentEnquiries: EnquiryRow[] = [];
@@ -39,6 +40,11 @@ export const load: PageServerLoad = async () => {
 			badgeCount = null;
 		}
 		try {
+			slideCount = await dbCount('home_slides', 'visible=eq.true');
+		} catch {
+			slideCount = null;
+		}
+		try {
 			rtwCount = await dbCount('rtw_submissions');
 		} catch {
 			rtwCount = null;
@@ -65,6 +71,7 @@ export const load: PageServerLoad = async () => {
 		contentPageCount: contentPages.length,
 		badgeCount,
 		rtwCount,
+		slideCount,
 		enquiryCount,
 		newEnquiryCount,
 		recentEnquiries,

@@ -1,5 +1,6 @@
 <script lang="ts">
 	import Seo from '$lib/components/Seo.svelte';
+	import { site } from '$lib/data/site';
 </script>
 
 <Seo
@@ -64,7 +65,7 @@
 		</ul>
 		<p>
 			If you want to exercise any of these rights, please get in touch with us at
-			<a href="mailto:info@jewelbb.co.uk">info@jewelbb.co.uk</a>.
+			<a href="mailto:{site.email}">{site.email}</a>.
 		</p>
 
 		<h2>5. Data retention</h2>
@@ -97,8 +98,8 @@
 		<p>
 			If you have any questions about this privacy policy or how we handle your data, please
 			contact us: Jewel Bespoke Build Ltd, Argent House, Surbiton, KT6 7LD. Phone:
-			<a href="tel:+442081091014">+44 (0)208 109 1014</a>. Email:
-			<a href="mailto:info@jewelbb.co.uk">info@jewelbb.co.uk</a>.
+			<a href={site.phoneHref}>{site.phone}</a>. Email:
+			<a href="mailto:{site.email}">{site.email}</a>.
 		</p>
 	</div>
 </section>

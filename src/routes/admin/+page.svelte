@@ -34,6 +34,14 @@
 			icon: 'M4 4h16v3H4V4zm0 5h10v2H4V9zm0 4h16v2H4v-2zm0 4h10v2H4v-2z'
 		},
 		{
+			href: '/admin/slideshow',
+			title: 'Slideshow',
+			count: data.slideCount,
+			unit: 'homepage photos',
+			blurb: 'The rotating photos at the top of the homepage',
+			icon: 'M4 5h16a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1zm1 12h14l-4.5-6-3.5 4.5-2.5-3L5 17z'
+		},
+		{
 			href: '/admin/staff',
 			title: 'Staff',
 			count: data.staffCount,

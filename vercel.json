@@ -2,7 +2,12 @@
 	"redirects": [
 		{
 			"source": "/copy-of-privacy-policy",
-			"destination": "/terms-and-conditions",
+			"destination": "/subcontractor-terms",
+			"permanent": true
+		},
+		{
+			"source": "/terms-and-conditions",
+			"destination": "/subcontractor-terms",
 			"permanent": true
 		}
 	]

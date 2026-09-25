@@ -12,7 +12,7 @@ import type { Actions, PageServerLoad } from './$types';
 /** Top-level routes that a project slug must not shadow. */
 const RESERVED_SLUGS = new Set([
 	'about', 'services', 'portfolio', 'ourcommunity', 'blog', 'brochure',
-	'contact', 'privacy-policy', 'terms-and-conditions', 'post', 'admin',
+	'contact', 'privacy-policy', 'terms-and-conditions', 'subcontractor-terms', 'post', 'admin',
 	'api', 'sitemap.xml', 'images', 'rtw'
 ]);
 

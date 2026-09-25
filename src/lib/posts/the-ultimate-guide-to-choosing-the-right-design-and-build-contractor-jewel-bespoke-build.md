@@ -30,7 +30,7 @@ Look for experienced contractors with a solid track record in the Surbiton and S
 
 ## 3. Verify Credentials and Experience
 
-Ensure your chosen contractor holds the necessary licenses, insurance, and certifications. A reputable contractor will have experience managing similar projects and will be transparent about their qualifications.
+Ensure your chosen contractor holds the necessary licences, insurance, and certifications. A reputable contractor will have experience managing similar projects and will be transparent about their qualifications.
 
 At Jewel Bespoke Build, we pride ourselves on our expertise in delivering bespoke construction projects across Surrey. Our team is fully licensed and insured for your peace of mind.
 
